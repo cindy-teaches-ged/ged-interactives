@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence Analyst — GED RLA Activity</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1A2E;
+  --paper: #F8F6F1;
+  --highlight-green: #1B7F4E;
+  --green-bg: #D6F0E3;
+  --highlight-yellow: #B07D00;
+  --yellow-bg: #FFF3C0;
+  --accent: #2D5BE3;
+  --accent-light: #E8EEFB;
+  --muted: #6B7280;
+  --border: #DDD8CF;
+  --card: #FFFFFF;
+  --red: #C0392B;
+  --red-bg: #FDECEA;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--ink);
+  color: #fff;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: .06em;
+  color: #FFD166;
+  line-height: 1;
+}
+.header-sub {
+  font-size: 12px;
+  color: #A0A8C0;
+  margin-top: .2rem;
+  letter-spacing: .04em;
+}
+.phase-badge {
+  background: #FFD166;
+  color: var(--ink);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: .06em;
+  padding: .35rem .9rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ── NAV TABS ── */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+  padding: 0 1rem;
+  gap: .25rem;
+}
+.tab {
+  padding: .7rem 1.1rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+.tab:hover { color: var(--accent); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── CONTENT ── */
+.content { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── SECTION HEADERS ── */
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: .4rem;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  letter-spacing: .05em;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: .5rem;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 640px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+.card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .6rem;
+}
+
+/* ── REFERENCE BOXES ── */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+@media(max-width:600px){ .ref-grid { grid-template-columns: 1fr; } }
+
+.ref-box {
+  border-radius: var(--radius);
+  padding: 1rem;
+  border: 2px solid transparent;
+}
+.ref-box.green {
+  background: var(--green-bg);
+  border-color: var(--highlight-green);
+}
+.ref-box.yellow {
+  background: var(--yellow-bg);
+  border-color: var(--highlight-yellow);
+}
+.ref-box-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.ref-box.green .ref-box-title { color: var(--highlight-green); }
+.ref-box.yellow .ref-box-title { color: var(--highlight-yellow); }
+.ref-list { list-style: none; }
+.ref-list li {
+  font-size: 13px;
+  padding: .25rem 0;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(0,0,0,.07);
+}
+.ref-list li:last-child { border-bottom: none; }
+.ref-list li::before { content: "• "; opacity: .5; }
+
+/* ── TIP BOX ── */
+.tip-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: .9rem 1.1rem;
+  margin-bottom: 1.25rem;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.tip-box strong { color: var(--accent); }
+
+/* ── PASSAGE ── */
+.passage-box {
+  background: #FAFAF8;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.passage-box p { margin-bottom: .75rem; }
+.passage-box p:last-child { margin-bottom: 0; }
+.passage-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .75rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+mark.strong {
+  background: var(--green-bg);
+  color: var(--highlight-green);
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+mark.weak {
+  background: var(--yellow-bg);
+  color: var(--highlight-yellow);
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ── SORT ACTIVITY ── */
+.evidence-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.25rem;
+  min-height: 60px;
+  background: #F0EDE6;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: .75rem;
+  transition: background .2s;
+}
+.evidence-pool.drag-over { background: var(--accent-light); border-color: var(--accent); }
+
+.evidence-chip {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: .45rem .8rem;
+  font-size: 13px;
+  cursor: grab;
+  user-select: none;
+  transition: all .15s;
+  line-height: 1.4;
+}
+.evidence-chip:hover { border-color: var(--accent); background: var(--accent-light); }
+.evidence-chip.dragging { opacity: .4; }
+.evidence-chip.placed-strong { border-color: var(--highlight-green); background: var(--green-bg); color: var(--highlight-green); font-weight: 600; }
+.evidence-chip.placed-weak { border-color: var(--highlight-yellow); background: var(--yellow-bg); color: var(--highlight-yellow); font-weight: 600; }
+
+.drop-zones { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+@media(max-width:550px){ .drop-zones { grid-template-columns: 1fr; } }
+
+.drop-zone {
+  min-height: 120px;
+  border-radius: var(--radius);
+  border: 2px dashed;
+  padding: .75rem;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  transition: background .2s;
+}
+.drop-zone.strong-zone {
+  border-color: var(--highlight-green);
+  background: rgba(214,240,227,.3);
+}
+.drop-zone.weak-zone {
+  border-color: var(--highlight-yellow);
+  background: rgba(255,243,192,.3);
+}
+.drop-zone.drag-over { opacity: .8; transform: scale(1.01); }
+.drop-zone-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: .25rem;
+}
+.drop-zone.strong-zone .drop-zone-label { color: var(--highlight-green); }
+.drop-zone.weak-zone .drop-zone-label { color: var(--highlight-yellow); }
+.drop-hint {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── QUIZ ── */
+.quiz-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+.quiz-q {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+.quiz-q .q-num {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: .15rem .45rem;
+  margin-right: .4rem;
+  vertical-align: middle;
+}
+.options { display: flex; flex-direction: column; gap: .5rem; }
+.opt-btn {
+  background: #F7F5F0;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: .7rem 1rem;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+.opt-btn.correct { border-color: var(--highlight-green); background: var(--green-bg); color: var(--highlight-green); font-weight: 600; }
+.opt-btn.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+.opt-btn:disabled { cursor: default; }
+.feedback-box {
+  margin-top: .75rem;
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  display: none;
+}
+.feedback-box.show { display: block; }
+.feedback-box.correct { background: var(--green-bg); color: var(--highlight-green); border: 1px solid var(--highlight-green); }
+.feedback-box.wrong { background: var(--red-bg); color: var(--red); border: 1px solid var(--red); }
+
+/* ── ORGANIZER ── */
+.organizer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+@media(max-width:600px){ .organizer-grid { grid-template-columns: 1fr; } }
+
+.org-col-header {
+  font-weight: 700;
+  font-size: 13px;
+  padding: .6rem .75rem;
+  border-radius: 6px;
+  text-align: center;
+  margin-bottom: .5rem;
+}
+.org-col-a .org-col-header { background: #E8EEF9; color: var(--accent); }
+.org-col-b .org-col-header { background: #F0E8F9; color: #7C3AED; }
+
+.org-row { margin-bottom: .5rem; }
+.org-row label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: .25rem;
+}
+.org-row textarea, .org-row input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: .55rem .75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  background: #FAFAF8;
+  color: var(--ink);
+  transition: border-color .15s;
+}
+.org-row textarea:focus, .org-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.org-verdict {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-top: .75rem;
+}
+.org-verdict label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #FFD166;
+  margin-bottom: .4rem;
+  display: block;
+}
+.org-verdict textarea {
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.2);
+  color: #fff;
+  width: 100%;
+  border-radius: 6px;
+  padding: .6rem .8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 70px;
+}
+.org-verdict textarea:focus { outline: none; border-color: #FFD166; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: .6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #1E45C5; }
+.btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.btn-outline:hover { background: var(--accent-light); }
+.btn-green { background: var(--highlight-green); color: #fff; }
+.btn-green:hover { background: #155F3A; }
+.btn-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* ── SCORE DISPLAY ── */
+.score-banner {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.score-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  color: #FFD166;
+  line-height: 1;
+}
+.score-label { font-size: 13px; color: #A0A8C0; margin-top: .2rem; }
+
+/* ── INSTRUCTOR NOTES ── */
+.instructor-note {
+  background: #FFF8EC;
+  border: 1px solid #F5C518;
+  border-left: 4px solid #F5C518;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: .85rem 1.1rem;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5C4300;
+  margin-bottom: 1rem;
+}
+.instructor-note strong { color: #7A5C00; }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { margin-bottom: 1.5rem; }
+.progress-bar {
+  height: 6px;
+  background: #E0DBD2;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+.progress-label { font-size: 12px; color: var(--muted); margin-top: .35rem; }
+
+/* ── RESULT CHIP ── */
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.result-row:last-child { border-bottom: none; }
+.result-icon { font-size: 1.1rem; min-width: 20px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Evidence Analyst</div>
+    <div class="header-sub">GED RLA Extended Response — Analyzing Strong & Weak Evidence</div>
+  </div>
+  <div class="phase-badge" id="phaseBadge">Phase 1 of 4</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="goTo(0)">① Review</button>
+  <button class="tab" onclick="goTo(1)">② Sort It</button>
+  <button class="tab" onclick="goTo(2)">③ Read & Mark</button>
+  <button class="tab" onclick="goTo(3)">④ Organizer</button>
+  <button class="tab" onclick="goTo(4)">⑤ Quiz</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 0 — REVIEW
+═══════════════════════════════════════════ -->
+<div class="screen active" id="screen0">
+  <div class="section-eyebrow">Phase 1 — Review the Concepts</div>
+  <div class="section-title">What Did the Video Teach Us?</div>
+  <div class="section-desc">Before we practice, let's get our tools ready. The video covered how to read passages for the GED Extended Response and decide which author makes the better argument.</div>
+
+  <div class="tip-box">
+    <strong>Key Question to Ask Yourself as You Read:</strong><br>
+    "What does the writer want me to <em>do</em> or <em>believe</em> about this topic?" — That's the author's <strong>position</strong>.<br>
+    Then ask: "Why should I believe them?" — That's the <strong>evidence</strong>.
+  </div>
+
+  <div class="ref-grid">
+    <div class="ref-box green">
+      <div class="ref-box-title">🟢 Strong Evidence</div>
+      <ul class="ref-list">
+        <li>Specific examples with details</li>
+        <li>Expert opinions (named experts)</li>
+        <li>Facts or statistics</li>
+        <li>Results from polls or surveys</li>
+        <li>Results from experiments or studies</li>
+        <li>Precise names, dates, research results</li>
+        <li>Recent sources</li>
+      </ul>
+    </div>
+    <div class="ref-box yellow">
+      <div class="ref-box-title">🟡 Weak Evidence</div>
+      <ul class="ref-list">
+        <li>Unclear references ("some say…")</li>
+        <li>Unnamed experts</li>
+        <li>Outdated studies</li>
+        <li>Irrelevant details</li>
+        <li>Flawed reasoning / logical errors</li>
+        <li>Personal opinions with no facts</li>
+        <li>Vague generalizations</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">How to Analyze — Your 4 Steps</div>
+    <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:.25rem;">
+      <div style="display:flex;gap:.75rem;align-items:flex-start;">
+        <div style="background:var(--accent);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;">1</div>
+        <div style="font-size:14px;line-height:1.6;"><strong>Identify each author's position.</strong> What do they want you to believe?</div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;">
+        <div style="background:var(--accent);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;">2</div>
+        <div style="font-size:14px;line-height:1.6;"><strong>Look for reasons and evidence</strong> each author uses to support their position.</div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;">
+        <div style="background:var(--highlight-green);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;">3</div>
+        <div style="font-size:14px;line-height:1.6;"><strong>Highlight:</strong> Green for strong evidence, Yellow for weak evidence.</div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;">
+        <div style="background:var(--highlight-green);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;">4</div>
+        <div style="font-size:14px;line-height:1.6;"><strong>Use your note chart</strong> to organize your thoughts — short notes only, not full sentences.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="instructor-note">
+    <strong>📋 Instructor Note:</strong> Spend 3–5 minutes here reviewing with the class before moving on. Ask students: "In your own words, what's the difference between strong and weak evidence?" Have 2–3 students share before advancing to Phase 2.
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goTo(1)">Ready — Let's Sort Evidence →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1 — SORT IT
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen1">
+  <div class="section-eyebrow">Phase 2 — Drag & Drop</div>
+  <div class="section-title">Sort the Evidence</div>
+  <div class="section-desc">Drag each piece of evidence into the correct column. Is it <strong style="color:var(--highlight-green)">Strong</strong> or <strong style="color:var(--highlight-yellow)">Weak</strong>? Discuss with your partner before you drop it.</div>
+
+  <div class="instructor-note">
+    <strong>📋 Instructor Note:</strong> Have students work in breakout pairs for 4–5 minutes. Then bring the class back to discuss any chips they disagreed on. The most productive discussion is around the borderline cases.
+  </div>
+
+  <div class="card">
+    <div class="card-label">Evidence Bank — Drag these into the correct column below</div>
+    <div class="evidence-pool" id="pool" ondragover="poolDragOver(event)" ondrop="dropToPool(event)">
+      <!-- chips injected by JS -->
+    </div>
+  </div>
+
+  <div class="drop-zones">
+    <div class="drop-zone strong-zone" id="strongZone" ondragover="zoneDragOver(event)" ondrop="dropToZone(event,'strong')">
+      <div class="drop-zone-label">🟢 Strong Evidence</div>
+      <div class="drop-hint" id="strongHint">Drop strong evidence here</div>
+    </div>
+    <div class="drop-zone weak-zone" id="weakZone" ondragover="zoneDragOver(event)" ondrop="dropToZone(event,'weak')">
+      <div class="drop-zone-label">🟡 Weak Evidence</div>
+      <div class="drop-hint" id="weakHint">Drop weak evidence here</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkSort()">Check My Answers ✓</button>
+    <button class="btn btn-outline" onclick="resetSort()">Reset</button>
+  </div>
+
+  <div id="sortResult" style="margin-top:1rem;display:none;"></div>
+
+  <div class="btn-row" id="sortNextBtn" style="display:none;">
+    <button class="btn btn-green" onclick="goTo(2)">Great — Move to Reading Practice →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2 — READ & MARK
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen2">
+  <div class="section-eyebrow">Phase 3 — Close Reading</div>
+  <div class="section-title">Read & Mark the Passages</div>
+  <div class="section-desc">Below are two short passages on <strong>whether cities should ban plastic bags</strong>. Read both. Strong evidence is already highlighted in <mark class="strong">green</mark> and weak evidence in <mark class="weak">yellow</mark>. Study the highlights — then answer the discussion questions at the bottom.</div>
+
+  <div class="instructor-note">
+    <strong>📋 Instructor Note:</strong> Read the passages aloud together. After reading, pause and ask: "Without looking at the bottom — which author do you think has stronger evidence? Why?" Then reveal the discussion questions.
+  </div>
+
+  <div class="passage-box">
+    <div class="passage-label">Passage A — In Support of a Plastic Bag Ban</div>
+    <p>Plastic bags are one of the most damaging forms of waste on the planet. <mark class="strong">A 2023 report by the National Oceanic and Atmospheric Administration (NOAA) found that over 8 million metric tons of plastic enter the world's oceans each year, with single-use bags among the top five items found in coastal cleanups.</mark> Cities that have already adopted bans have seen measurable improvements. <mark class="strong">San Francisco, which enacted a plastic bag ban in 2007, reported a 72% reduction in plastic bag litter within two years, according to a study published in the journal Environmental Science &amp; Policy.</mark></p>
+    <p><mark class="weak">Everyone knows that plastic bags are terrible for the environment — you can see them blowing around anywhere you go.</mark> Banning them is simply the right thing to do. <mark class="weak">Some environmentalists believe the ban will also reduce overall plastic consumption, though the exact effects are unclear.</mark> Cities that care about their residents should act immediately.</p>
+  </div>
+
+  <div class="passage-box">
+    <div class="passage-label">Passage B — Against a Mandatory Plastic Bag Ban</div>
+    <p>While reducing plastic waste is an important goal, mandatory bag bans are not the most effective solution. <mark class="strong">A 2021 study by the American Economic Review followed 400 grocery stores across five states and found that plastic bag bans led shoppers to purchase more thick plastic trash bags — increasing total plastic use by 12%.</mark> Small businesses bear a disproportionate cost from these bans. <mark class="strong">The National Federation of Independent Business surveyed 1,200 small retailers in 2022 and found that compliance costs averaged $4,800 per store in the first year.</mark></p>
+    <p><mark class="weak">Bag bans are really just a feel-good policy that doesn't solve the bigger problem.</mark> Many shoppers dislike the inconvenience of bringing reusable bags. <mark class="weak">A better approach might be education, though nobody has really tried this seriously yet.</mark> The government should focus on bigger issues before worrying about grocery bags.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Class Discussion — Talk through these together</div>
+    <div style="display:flex;flex-direction:column;gap:.9rem;margin-top:.25rem;">
+      <div style="font-size:14px;line-height:1.6;"><span style="font-weight:700;color:var(--accent);">Q1.</span> Look at Passage A's strong evidence. What makes the NOAA report strong? What specific details make it credible?</div>
+      <hr style="border:none;border-top:1px solid var(--border);">
+      <div style="font-size:14px;line-height:1.6;"><span style="font-weight:700;color:var(--accent);">Q2.</span> The yellow-highlighted sentence in Passage A says "everyone knows." Why is that weak evidence? What would make it stronger?</div>
+      <hr style="border:none;border-top:1px solid var(--border);">
+      <div style="font-size:14px;line-height:1.6;"><span style="font-weight:700;color:var(--accent);">Q3.</span> Both passages have strong AND weak evidence. Which author overall has <em>more</em> strong evidence? How does that affect which position is better supported?</div>
+      <hr style="border:none;border-top:1px solid var(--border);">
+      <div style="font-size:14px;line-height:1.6;"><span style="font-weight:700;color:var(--accent);">Q4.</span> Passage B says "a better approach might be education, though nobody has really tried this seriously yet." What type of weak evidence is that? (Pick from our list.)</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goTo(3)">Discussion Done — Build My Organizer →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3 — GRAPHIC ORGANIZER
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen3">
+  <div class="section-eyebrow">Phase 4 — Graphic Organizer</div>
+  <div class="section-title">Fill In Your Note Chart</div>
+  <div class="section-desc">Use the passages from Phase 3. Fill in your organizer using <em>short notes</em> — just a few words, not full sentences. This is exactly what the video showed.</div>
+
+  <div class="tip-box">
+    <strong>Tip from the video:</strong> Don't waste time writing complete sentences in your notes. Just write a few words to remind you of the evidence and your thoughts about it.
+  </div>
+
+  <div class="organizer-grid">
+    <div class="org-col-a">
+      <div class="org-col-header">📄 Passage A — Pro Ban</div>
+      <div class="org-row">
+        <label>Author's Position / Claim</label>
+        <textarea rows="2" placeholder="What does Passage A want you to believe?"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Strong Evidence (🟢)</label>
+        <textarea rows="3" placeholder="List strong evidence — short notes only"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Weak Evidence (🟡)</label>
+        <textarea rows="3" placeholder="List weak evidence — short notes only"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Your Rating: Strong or Weak Overall?</label>
+        <input type="text" placeholder="e.g. Strong — 2 solid studies, named sources">
+      </div>
+    </div>
+
+    <div class="org-col-b">
+      <div class="org-col-header" style="background:#F3E8FF;color:#7C3AED;">📄 Passage B — Anti-Ban</div>
+      <div class="org-row">
+        <label>Author's Position / Claim</label>
+        <textarea rows="2" placeholder="What does Passage B want you to believe?"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Strong Evidence (🟢)</label>
+        <textarea rows="3" placeholder="List strong evidence — short notes only"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Weak Evidence (🟡)</label>
+        <textarea rows="3" placeholder="List weak evidence — short notes only"></textarea>
+      </div>
+      <div class="org-row">
+        <label>Your Rating: Strong or Weak Overall?</label>
+        <input type="text" placeholder="e.g. Weak overall — opinions dominate">
+      </div>
+    </div>
+  </div>
+
+  <div class="org-verdict">
+    <label>⚖️ My Verdict — Which Position Is Better Supported?</label>
+    <textarea rows="3" placeholder="Which passage has stronger evidence? Write 1–2 sentences explaining why. Remember: better supported ≠ which side YOU agree with."></textarea>
+  </div>
+
+  <div class="instructor-note" style="margin-top:1rem;">
+    <strong>📋 Instructor Note:</strong> After students complete their organizers, ask 2–3 to share their Verdict. Emphasize that the goal is to argue from evidence, not personal opinion. If students pick different passages, discuss why — both can be defensible if the reasoning is evidence-based.
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goTo(4)">Organizer Done — Take the Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4 — QUIZ
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen4">
+  <div class="section-eyebrow">Phase 5 — Knowledge Check</div>
+  <div class="section-title">Quick Quiz</div>
+  <div class="section-desc">Answer these 6 questions on your own. No looking back yet!</div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
+    <div class="progress-label" id="quizProgressLabel">0 of 6 answered</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-card" id="qc0">
+    <div class="quiz-q"><span class="q-num">1</span> According to the video, what does it mean to "analyze" the passages?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(0,0,false)">A. To summarize what each passage says in your own words</button>
+      <button class="opt-btn" onclick="answer(0,1,true)">B. To study closely, look for reasons and evidence, and determine if the evidence is strong or weak</button>
+      <button class="opt-btn" onclick="answer(0,2,false)">C. To decide which author you agree with based on your personal opinion</button>
+      <button class="opt-btn" onclick="answer(0,3,false)">D. To count how many facts each passage includes</button>
+    </div>
+    <div class="feedback-box" id="fb0"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card" id="qc1">
+    <div class="quiz-q"><span class="q-num">2</span> Which of the following is an example of <strong>strong</strong> evidence?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(1,0,false)">A. "Many experts believe recycling helps the environment."</button>
+      <button class="opt-btn" onclick="answer(1,1,false)">B. "Some studies from years ago showed that exercise is good for you."</button>
+      <button class="opt-btn" onclick="answer(1,2,true)">C. "A 2022 CDC study of 10,000 adults found that 30 minutes of daily walking reduced heart disease risk by 22%."</button>
+      <button class="opt-btn" onclick="answer(1,3,false)">D. "Everyone knows that eating healthy food makes you feel better."</button>
+    </div>
+    <div class="feedback-box" id="fb1"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card" id="qc2">
+    <div class="quiz-q"><span class="q-num">3</span> An author writes: <em>"A well-known scientist once said that climate change is the biggest threat we face."</em> What makes this weak evidence?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(2,0,false)">A. It is about climate change, which is not relevant to the GED</button>
+      <button class="opt-btn" onclick="answer(2,1,true)">B. The expert is unnamed — we cannot verify who said it or check the source</button>
+      <button class="opt-btn" onclick="answer(2,2,false)">C. It uses a quote, and quotes are always weak evidence</button>
+      <button class="opt-btn" onclick="answer(2,3,false)">D. It is too short to count as real evidence</button>
+    </div>
+    <div class="feedback-box" id="fb2"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card" id="qc3">
+    <div class="quiz-q"><span class="q-num">4</span> The video suggested using <strong>color-coding</strong> while reading passages. What color did it recommend for weak evidence?</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(3,0,false)">A. Red</button>
+      <button class="opt-btn" onclick="answer(3,1,true)">B. Yellow</button>
+      <button class="opt-btn" onclick="answer(3,2,false)">C. Blue</button>
+      <button class="opt-btn" onclick="answer(3,3,false)">D. Orange</button>
+    </div>
+    <div class="feedback-box" id="fb3"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card" id="qc4">
+    <div class="quiz-q"><span class="q-num">5</span> To identify an author's <strong>position</strong> (claim), the video says to ask yourself:</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(4,0,false)">A. "How long is this passage?"</button>
+      <button class="opt-btn" onclick="answer(4,1,false)">B. "What is the most interesting fact in this passage?"</button>
+      <button class="opt-btn" onclick="answer(4,2,true)">C. "What does the writer want me to do or believe about this topic?"</button>
+      <button class="opt-btn" onclick="answer(4,3,false)">D. "Which passage was written more recently?"</button>
+    </div>
+    <div class="feedback-box" id="fb4"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card" id="qc5">
+    <div class="quiz-q"><span class="q-num">6</span> When taking notes in your graphic organizer, the video recommended:</div>
+    <div class="options">
+      <button class="opt-btn" onclick="answer(5,0,true)">A. Writing a few short words to remind you of the evidence — not complete sentences</button>
+      <button class="opt-btn" onclick="answer(5,1,false)">B. Copying the passage word for word so you don't miss anything</button>
+      <button class="opt-btn" onclick="answer(5,2,false)">C. Writing a full paragraph summarizing each piece of evidence</button>
+      <button class="opt-btn" onclick="answer(5,3,false)">D. Only noting evidence you personally agree with</button>
+    </div>
+    <div class="feedback-box" id="fb5"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsPanel" style="display:none;">
+    <hr class="divider">
+    <div class="score-banner">
+      <div class="score-big" id="scoreBig">—</div>
+      <div class="score-label" id="scoreLabel">—</div>
+    </div>
+    <div class="card" id="resultDetails"></div>
+    <div class="instructor-note" style="margin-top:1rem;">
+      <strong>📋 Instructor Note:</strong> Review any missed questions as a class. Q3 and Q6 are the most commonly missed — they require applying the concept, not just recalling it.
+    </div>
+  </div>
+
+</div><!-- end screen4 -->
+</div><!-- end content -->
+
+<script>
+// ── NAVIGATION ──
+const screens = document.querySelectorAll('.screen');
+const tabs = document.querySelectorAll('.tab');
+const badges = ['Phase 1 of 4','Phase 2 of 4','Phase 3 of 4','Phase 4 of 4','Phase 5: Quiz'];
+
+function goTo(i){
+  screens.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+  tabs.forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.getElementById('phaseBadge').textContent = badges[i];
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── SORT ACTIVITY ──
+const chips = [
+  {id:'c1', text:'A 2022 Harvard study of 5,000 patients found…', correct:'strong'},
+  {id:'c2', text:'"Everybody knows fast food is bad for you."', correct:'weak'},
+  {id:'c3', text:'Dr. Maria Ruiz, an economist at MIT, reported…', correct:'strong'},
+  {id:'c4', text:'"Some experts believe the policy helps, but results are mixed."', correct:'weak'},
+  {id:'c5', text:'A 1985 survey showed slightly higher test scores.', correct:'weak'},
+  {id:'c6', text:'The EPA recorded a 34% drop in emissions from 2018–2023.', correct:'strong'},
+  {id:'c7', text:'"It just makes sense that people would prefer option A."', correct:'weak'},
+  {id:'c8', text:'A Pew Research poll of 12,000 adults in 2023 found…', correct:'strong'},
+];
+
+let chipZone = {}; // id → 'pool'|'strong'|'weak'
+chips.forEach(c=>chipZone[c.id]='pool');
+
+function renderPool(){
+  const pool = document.getElementById('pool');
+  pool.innerHTML='';
+  chips.filter(c=>chipZone[c.id]==='pool').forEach(c=>{
+    pool.appendChild(makeChip(c));
+  });
+  document.getElementById('strongHint').style.display = chips.some(c=>chipZone[c.id]==='strong') ? 'none':'block';
+  document.getElementById('weakHint').style.display = chips.some(c=>chipZone[c.id]==='weak') ? 'none':'block';
+}
+
+function makeChip(c){
+  const d=document.createElement('div');
+  d.className='evidence-chip';
+  if(chipZone[c.id]==='strong') d.classList.add('placed-strong');
+  if(chipZone[c.id]==='weak') d.classList.add('placed-weak');
+  d.textContent=c.text;
+  d.draggable=true;
+  d.dataset.id=c.id;
+  d.addEventListener('dragstart',e=>{e.dataTransfer.setData('chipId',c.id);d.classList.add('dragging');});
+  d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+  return d;
+}
+
+function renderZone(zone){
+  const el = document.getElementById(zone==='strong'?'strongZone':'weakZone');
+  // keep label + hint, rebuild chips
+  const label = el.querySelector('.drop-zone-label');
+  const hint = el.querySelector('.drop-hint');
+  el.innerHTML='';
+  el.appendChild(label);
+  el.appendChild(hint);
+  chips.filter(c=>chipZone[c.id]===zone).forEach(c=>el.appendChild(makeChip(c)));
+  hint.style.display = chips.some(c=>chipZone[c.id]===zone)?'none':'block';
+}
+
+function zoneDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function poolDragOver(e){e.preventDefault();}
+
+document.addEventListener('dragleave',e=>{
+  if(e.currentTarget.classList) e.currentTarget.classList.remove('drag-over');
+});
+
+function dropToZone(e,zone){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id=e.dataTransfer.getData('chipId');
+  if(!id) return;
+  chipZone[id]=zone;
+  renderPool();
+  renderZone('strong');
+  renderZone('weak');
+  document.getElementById('sortResult').style.display='none';
+  document.getElementById('sortNextBtn').style.display='none';
+}
+function dropToPool(e){
+  e.preventDefault();
+  const id=e.dataTransfer.getData('chipId');
+  if(!id) return;
+  chipZone[id]='pool';
+  renderPool();
+  renderZone('strong');
+  renderZone('weak');
+}
+
+function checkSort(){
+  const placed = chips.filter(c=>chipZone[c.id]!=='pool');
+  if(placed.length<chips.length){
+    alert('Sort all 8 pieces of evidence first!');
+    return;
+  }
+  let correct=0, results=[];
+  chips.forEach(c=>{
+    const isRight = chipZone[c.id]===c.correct;
+    if(isRight) correct++;
+    results.push({text:c.text, placed:chipZone[c.id], correct:c.correct, ok:isRight});
+  });
+  const pct = Math.round(correct/chips.length*100);
+  let html=`<div class="card"><div class="card-label">Results: ${correct}/${chips.length} correct (${pct}%)</div>`;
+  results.forEach(r=>{
+    html+=`<div class="result-row"><span class="result-icon">${r.ok?'✅':'❌'}</span><span style="font-size:13px;line-height:1.5;">${r.text}<br><span style="color:var(--muted);font-size:12px;">You said: ${r.placed} | Correct: ${r.correct}</span></span></div>`;
+  });
+  html+='</div>';
+  const res=document.getElementById('sortResult');
+  res.innerHTML=html;
+  res.style.display='block';
+  if(correct>=6) document.getElementById('sortNextBtn').style.display='flex';
+}
+
+function resetSort(){
+  chips.forEach(c=>chipZone[c.id]='pool');
+  renderPool();
+  renderZone('strong');
+  renderZone('weak');
+  document.getElementById('sortResult').style.display='none';
+  document.getElementById('sortNextBtn').style.display='none';
+}
+
+// ── QUIZ ──
+const answers = [1,2,1,1,2,0];
+const feedbacks = [
+  {right:"Correct! 'Analyze' means to study closely, look at the details, and evaluate whether evidence is strong or weak — not just summarize.",
+   wrong:"Not quite. The video defined 'analyze' as studying closely and carefully — paying attention to reasons and evidence, and whether they are strong or weak."},
+  {right:"Correct! This is strong because it names a specific organization (CDC), gives a precise year (2022), a sample size (10,000 adults), and a specific measurable result (22% reduction).",
+   wrong:"Not quite. The correct answer is C. It names the CDC, provides a year, sample size, and a specific percentage — all markers of strong, verifiable evidence."},
+  {right:"Correct! When an expert is unnamed, we cannot verify who they are, what their credentials are, or whether the quote is accurate. Named experts are much stronger.",
+   wrong:"Not quite. The problem is that the expert is unnamed — 'a well-known scientist' gives us nothing to verify. Strong evidence names the expert and their credentials."},
+  {right:"Correct! The video recommended green for strong evidence and yellow for weak evidence.",
+   wrong:"The video recommended yellow for weak evidence. Green was for strong evidence."},
+  {right:"Correct! That's the key question from the video. Once you know what the author wants you to believe, you can evaluate whether their evidence actually supports it.",
+   wrong:"The video gave a specific tip: ask yourself 'What does the writer want me to do or believe about this topic?' — that reveals the author's position."},
+  {right:"Correct! The video specifically said not to waste time writing complete sentences — just a few words to remind yourself of the evidence and your reaction to it.",
+   wrong:"The video specifically said to avoid writing complete sentences in your notes. Short words and phrases are enough — they help you organize without wasting time."},
+];
+
+let quizAnswered = new Array(6).fill(false);
+let quizCorrect = new Array(6).fill(false);
+let answeredCount = 0;
+
+function answer(qIdx, optIdx, isCorrect){
+  if(quizAnswered[qIdx]) return;
+  quizAnswered[qIdx]=true;
+  quizCorrect[qIdx]=isCorrect;
+  answeredCount++;
+
+  const card = document.getElementById('qc'+qIdx);
+  const btns = card.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===answers[qIdx]) b.classList.add('correct');
+    else if(i===optIdx && !isCorrect) b.classList.add('wrong');
+  });
+
+  const fb=document.getElementById('fb'+qIdx);
+  fb.textContent = isCorrect ? '✅ '+feedbacks[qIdx].right : '❌ '+feedbacks[qIdx].wrong;
+  fb.className='feedback-box show '+(isCorrect?'correct':'wrong');
+
+  // progress
+  const pct = Math.round(answeredCount/6*100);
+  document.getElementById('quizProgress').style.width=pct+'%';
+  document.getElementById('quizProgressLabel').textContent=`${answeredCount} of 6 answered`;
+
+  if(answeredCount===6) showResults();
+}
+
+function showResults(){
+  const total = quizCorrect.filter(Boolean).length;
+  const pct = Math.round(total/6*100);
+  document.getElementById('scoreBig').textContent=`${total}/6`;
+  const msgs=['Keep reviewing — you\'ve got this!','Good progress — review the missed questions.','Nice work!','Strong performance!','Excellent!','Perfect score! 🎉'];
+  const msgIdx = total<=1?0:total<=2?1:total<=3?2:total<=4?3:total===5?4:5;
+  document.getElementById('scoreLabel').textContent=`${pct}% — ${msgs[msgIdx]}`;
+
+  let det='<div class="card-label">Question-by-question</div>';
+  quizCorrect.forEach((ok,i)=>{
+    det+=`<div class="result-row"><span class="result-icon">${ok?'✅':'❌'}</span><span style="font-size:13px;">Question ${i+1} — ${ok?'Correct':'Needs Review'}</span></div>`;
+  });
+  document.getElementById('resultDetails').innerHTML=det;
+  document.getElementById('resultsPanel').style.display='block';
+  document.getElementById('resultsPanel').scrollIntoView({behavior:'smooth'});
+}
+
+// ── INIT ──
+renderPool();
+renderZone('strong');
+renderZone('weak');
+</script>
+</body>
+</html>
