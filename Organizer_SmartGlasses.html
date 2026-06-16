@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphic Organizer — Clear Vision or Clouded Privacy?</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4EF;
+  --surface: #FFFFFF;
+  --border: #DDD8D0;
+  --border-focus: #2C5F8A;
+  --text: #1E1E1E;
+  --muted: #6B6460;
+  --accent: #2C5F8A;
+  --accent-light: #EAF1F8;
+  --accent-mid: #C5D8EC;
+  --green: #2E7A45;
+  --green-light: #EDF6F1;
+  --amber: #B85C00;
+  --amber-light: #FEF3E7;
+  --red: #A82020;
+  --red-light: #FDF0F0;
+  --radius: 8px;
+  --shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Header ── */
+.header {
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+}
+.header-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+.header-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 700; color: var(--text);
+  line-height: 1.2; margin-bottom: 0.3rem;
+}
+.header-subtitle {
+  font-size: 15px; color: var(--muted);
+}
+
+/* ── Prompt card ── */
+.prompt-card {
+  background: var(--accent-light);
+  border: 1px solid var(--accent-mid);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.prompt-card-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.prompt-card p { font-size: 15px; line-height: 1.7; margin-bottom: 0.5rem; }
+.prompt-card p:last-child { margin-bottom: 0; }
+.prompt-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 0.75rem; padding: 0.45rem 1rem;
+  background: var(--accent); color: white;
+  border-radius: 6px; font-size: 13px; font-weight: 600;
+  text-decoration: none; transition: background 0.15s;
+}
+.prompt-link:hover { background: #1e4468; }
+.prompt-link svg { flex-shrink: 0; }
+
+/* ── Section labels ── */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin: 2rem 0 0.75rem;
+}
+.section-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: white;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 15px; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.section-hint {
+  font-size: 13px; color: var(--muted); margin-bottom: 0.75rem;
+  font-style: italic; padding-left: 2.5rem;
+}
+
+/* ── Form fields ── */
+.field {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.875rem;
+  box-shadow: var(--shadow);
+}
+.field-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 0.5rem; display: block;
+}
+.field textarea {
+  width: 100%; border: none; outline: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px; line-height: 1.65; color: var(--text);
+  resize: vertical; background: transparent;
+  min-height: 72px;
+}
+.field textarea::placeholder { color: #BBADA0; font-style: italic; }
+.field textarea:focus { outline: none; }
+.field:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(44,95,138,0.12);
+}
+
+/* Two-col evidence grid */
+.evidence-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.75rem; margin-bottom: 0.875rem;
+}
+@media (max-width: 600px) { .evidence-grid { grid-template-columns: 1fr; } }
+.evidence-grid .field { margin-bottom: 0; }
+
+/* Three-col for evidence row */
+.evidence-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem; margin-bottom: 0.875rem;
+}
+@media (max-width: 700px) { .evidence-row { grid-template-columns: 1fr; } }
+.evidence-row .field { margin-bottom: 0; }
+
+/* ── Side labels for evidence sections ── */
+.ev-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+  box-shadow: var(--shadow);
+}
+.ev-block-header {
+  padding: 0.5rem 1.25rem;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--accent-light); color: var(--accent);
+  border-bottom: 1px solid var(--accent-mid);
+}
+.ev-block-header.green { background: var(--green-light); color: var(--green); border-bottom-color: #B6DEC8; }
+.ev-block-header.amber { background: var(--amber-light); color: var(--amber); border-bottom-color: #F5CEA0; }
+.ev-block-header.red { background: var(--red-light); color: var(--red); border-bottom-color: #F2C0C0; }
+.ev-block-body { padding: 1rem 1.25rem; background: var(--surface); }
+.ev-block-body .field {
+  box-shadow: none; border-color: var(--border);
+  margin-bottom: 0.75rem;
+}
+.ev-block-body .field:last-child { margin-bottom: 0; }
+.ev-block-body .evidence-grid { margin-bottom: 0; }
+.ev-block-body .evidence-grid .field { margin-bottom: 0; }
+
+/* ── Position selector ── */
+.position-selector {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+  margin-bottom: 0.875rem;
+}
+.pos-btn {
+  flex: 1; min-width: 180px;
+  padding: 0.75rem 1rem; border-radius: var(--radius);
+  border: 2px solid var(--border);
+  background: var(--surface); cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--muted);
+  text-align: left; transition: all 0.15s;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.pos-btn:hover { border-color: var(--accent); color: var(--accent); }
+.pos-btn.selected-pro { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.pos-btn.selected-con { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.pos-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; flex-shrink: 0; }
+.pos-btn.selected-pro .pos-dot,
+.pos-btn.selected-con .pos-dot { background: currentColor; }
+
+/* ── Generate button ── */
+.generate-wrap {
+  margin: 2.5rem 0 0;
+  text-align: center;
+}
+.generate-btn {
+  padding: 0.9rem 2.5rem;
+  background: var(--accent); color: white;
+  border: none; border-radius: var(--radius);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+  box-shadow: 0 2px 8px rgba(44,95,138,0.25);
+}
+.generate-btn:hover { background: #1e4468; }
+.generate-btn:active { transform: scale(0.98); }
+
+/* ── Output section ── */
+#output-section {
+  display: none;
+  margin-top: 2.5rem;
+}
+.output-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--green);
+  margin-bottom: 0.5rem;
+}
+.output-header {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.2rem; color: var(--text);
+  margin-bottom: 1rem;
+}
+.output-box {
+  background: var(--surface);
+  border: 2px solid var(--green);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  font-size: 15px; line-height: 1.8; color: var(--text);
+  white-space: pre-wrap;
+  user-select: text;
+  box-shadow: 0 2px 12px rgba(46,122,69,0.1);
+}
+
+/* Copy instructions */
+.copy-instructions {
+  background: var(--amber-light);
+  border: 1px solid #F5CEA0;
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem 0;
+  font-size: 14px; line-height: 1.75;
+}
+.copy-instructions strong {
+  display: block; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 0.6rem;
+}
+.copy-instructions ol { padding-left: 1.25rem; }
+.copy-instructions ol li { margin-bottom: 0.4rem; }
+.copy-instructions .key {
+  display: inline-block; background: #fff;
+  border: 1px solid #CCC; border-bottom: 2px solid #AAA;
+  border-radius: 4px; padding: 1px 7px;
+  font-family: monospace; font-size: 13px; color: #333;
+}
+
+.copy-btn {
+  display: block; width: 100%;
+  padding: 0.75rem;
+  background: var(--green); color: white;
+  border: none; border-radius: var(--radius);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+  margin-bottom: 0.75rem;
+}
+.copy-btn:hover { background: #1f5c32; }
+.copy-btn.copied { background: #145226; }
+
+.start-over-btn {
+  display: block; width: 100%;
+  padding: 0.65rem;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px; cursor: pointer;
+  transition: all 0.15s; margin-top: 0.5rem;
+}
+.start-over-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.validation-msg {
+  display: none; background: var(--red-light);
+  border: 1px solid #F2C0C0; border-radius: var(--radius);
+  padding: 0.875rem 1.25rem; margin-top: 1rem;
+  font-size: 14px; color: var(--red);
+}
+.validation-msg.show { display: block; }
+
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-eyebrow">GED RLA — Argument Writing</div>
+    <div class="header-title">Clear Vision or Clouded Privacy?</div>
+    <div class="header-subtitle">Graphic Organizer — Plan your argument before you write</div>
+  </div>
+
+  <!-- Prompt card -->
+  <div class="prompt-card">
+    <div class="prompt-card-label">Your Writing Task</div>
+    <p>Read the passage about smart recording glasses. Then use this organizer to plan your response.</p>
+    <p>Your essay should identify which argument is <strong>better supported by evidence</strong>, state your position clearly, use specific evidence from the passage, and explain why the opposing argument is weaker.</p>
+    <p>Open the passage in a new tab before you begin:</p>
+    <a class="prompt-link" href="https://drive.google.com/file/d/1_pR29-InuPtnMLrCplUvsvwB8RH8Wi6S/view?usp=sharing" target="_blank" rel="noopener">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      Open the Passage (Google Drive)
+    </a>
+  </div>
+
+  <!-- Section 1: Position -->
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">My Position</div>
+  </div>
+  <p class="section-hint">Which side does the passage support more convincingly? Choose one.</p>
+
+  <div class="position-selector">
+    <button class="pos-btn" id="btn-pro" onclick="selectPosition('pro')">
+      <span class="pos-dot"></span>
+      The case FOR smart glasses is better supported
+    </button>
+    <button class="pos-btn" id="btn-con" onclick="selectPosition('con')">
+      <span class="pos-dot"></span>
+      The case AGAINST smart glasses is better supported
+    </button>
+  </div>
+  <input type="hidden" id="position-val" value="">
+
+  <div class="field">
+    <label class="field-label" for="claim">My claim — state your position in one or two sentences</label>
+    <textarea id="claim" rows="3" placeholder="The argument against smart recording glasses is better supported because the evidence is more specific, more recent, and directly addresses the real risks..."></textarea>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 2: Evidence from stronger side -->
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Evidence from the Stronger Argument</div>
+  </div>
+  <p class="section-hint">Choose your best 2–3 pieces of evidence. For each one: name the source, describe the detail, and explain why it matters.</p>
+
+  <!-- Evidence 1 -->
+  <div class="ev-block">
+    <div class="ev-block-header green">Evidence 1</div>
+    <div class="ev-block-body">
+      <div class="evidence-grid">
+        <div class="field">
+          <label class="field-label" for="ev1-source">Source (who said it / what study)</label>
+          <textarea id="ev1-source" rows="2" placeholder="e.g. A 2023 survey by the Electronic Frontier Foundation..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label" for="ev1-detail">The specific detail or statistic</label>
+          <textarea id="ev1-detail" rows="2" placeholder="e.g. 78% of respondents felt significantly more uncomfortable being recorded by concealed wearable tech..."></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ev1-reason">Why this matters — reasoning</label>
+        <textarea id="ev1-reason" rows="2" placeholder="This matters because it shows that people experience smart glasses differently from a phone — the invisibility changes the nature of the privacy violation..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evidence 2 -->
+  <div class="ev-block">
+    <div class="ev-block-header green">Evidence 2</div>
+    <div class="ev-block-body">
+      <div class="evidence-grid">
+        <div class="field">
+          <label class="field-label" for="ev2-source">Source (who said it / what study)</label>
+          <textarea id="ev2-source" rows="2" placeholder="e.g. A 2022 pilot study at Johns Hopkins Medical Center..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label" for="ev2-detail">The specific detail or statistic</label>
+          <textarea id="ev2-detail" rows="2" placeholder="e.g. hands-free documentation tools reduced charting errors by 34%..."></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ev2-reason">Why this matters — reasoning</label>
+        <textarea id="ev2-reason" rows="2" placeholder="This matters because..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evidence 3 (optional) -->
+  <div class="ev-block">
+    <div class="ev-block-header green">Evidence 3 <span style="font-weight:400;font-style:italic;opacity:0.7">(optional but recommended)</span></div>
+    <div class="ev-block-body">
+      <div class="evidence-grid">
+        <div class="field">
+          <label class="field-label" for="ev3-source">Source (who said it / what study)</label>
+          <textarea id="ev3-source" rows="2" placeholder="Source..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label" for="ev3-detail">The specific detail or statistic</label>
+          <textarea id="ev3-detail" rows="2" placeholder="Detail or statistic..."></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ev3-reason">Why this matters — reasoning</label>
+        <textarea id="ev3-reason" rows="2" placeholder="This matters because..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 3: Counterargument -->
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">The Other Side's Best Point</div>
+  </div>
+  <p class="section-hint">What is the strongest thing the opposing argument says? You don't have to agree with it — but you need to acknowledge it and explain why it doesn't change your position.</p>
+
+  <div class="ev-block">
+    <div class="ev-block-header amber">Counterargument</div>
+    <div class="ev-block-body">
+      <div class="field">
+        <label class="field-label" for="counter-point">Their best point</label>
+        <textarea id="counter-point" rows="2" placeholder="The other side argues that..."></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label" for="counter-response">Why it doesn't change your position</label>
+        <textarea id="counter-response" rows="3" placeholder="However, this point does not change my position because..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 4: Faulty Reasoning -->
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Faulty Reasoning I Noticed</div>
+  </div>
+  <p class="section-hint">Did you spot any logical flaws in the weaker argument? Name the type (slippery slope, bandwagon, personal attack, ridiculous claim) and describe it. If you didn't find any, write "none identified."</p>
+
+  <div class="ev-block">
+    <div class="ev-block-header red">Faulty Reasoning</div>
+    <div class="ev-block-body">
+      <div class="evidence-grid">
+        <div class="field">
+          <label class="field-label" for="faulty-type">Type of faulty reasoning</label>
+          <textarea id="faulty-type" rows="2" placeholder="e.g. Slippery slope / Bandwagon / None identified..."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label" for="faulty-example">Where I saw it in the passage</label>
+          <textarea id="faulty-example" rows="2" placeholder="e.g. The passage implies that allowing smart glasses will lead to..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Section 5: Conclusion -->
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">My Conclusion</div>
+  </div>
+  <p class="section-hint">Restate your position in fresh words. Do not switch sides. Do not introduce new evidence here.</p>
+
+  <div class="field">
+    <label class="field-label" for="conclusion">Closing thought</label>
+    <textarea id="conclusion" rows="3" placeholder="In conclusion, the evidence shows that..."></textarea>
+  </div>
+
+  <!-- Generate button -->
+  <div class="generate-wrap">
+    <button class="generate-btn" onclick="generateOutput()">
+      Build my essay draft →
+    </button>
+    <div class="validation-msg" id="val-msg">
+      Please fill in your position, claim, and at least one complete evidence block (source + detail + reasoning) before generating.
+    </div>
+  </div>
+
+  <!-- Output section -->
+  <div id="output-section">
+    <hr class="divider">
+    <div class="output-label">Your essay draft is ready</div>
+    <div class="output-header">Select all → Copy → Paste into Google Docs</div>
+
+    <div class="copy-instructions">
+      <strong>How to copy your draft into Google Docs — step by step</strong>
+      <ol>
+        <li>Click the green <strong>Copy to clipboard</strong> button below. Your draft will be copied automatically.</li>
+        <li>Open a new browser tab. In the address bar at the top of your screen, type <strong>docs.new</strong> and press <span class="key">Enter</span>. This opens a blank Google Doc — a free online word processor that saves automatically to your Google account.</li>
+        <li>Click anywhere inside the blank white document page.</li>
+        <li>Hold the <span class="key">Ctrl</span> key and press <span class="key">V</span> at the same time. Your draft will appear.</li>
+        <li>Your work saves automatically. You can close the tab and find it again anytime by going to <strong>drive.google.com</strong>.</li>
+      </ol>
+    </div>
+
+    <button class="copy-btn" id="copy-btn" onclick="copyOutput()">
+      Copy to clipboard
+    </button>
+
+    <div class="output-box" id="output-box"></div>
+
+    <button class="start-over-btn" onclick="startOver()">← Edit my organizer</button>
+  </div>
+
+</div><!-- end page -->
+
+<script>
+let selectedPosition = '';
+
+function selectPosition(val) {
+  selectedPosition = val;
+  document.getElementById('position-val').value = val;
+  document.getElementById('btn-pro').className = 'pos-btn' + (val === 'pro' ? ' selected-pro' : '');
+  document.getElementById('btn-con').className = 'pos-btn' + (val === 'con' ? ' selected-con' : '');
+}
+
+function get(id) {
+  return (document.getElementById(id).value || '').trim();
+}
+
+function generateOutput() {
+  const claim = get('claim');
+  const ev1src = get('ev1-source');
+  const ev1det = get('ev1-detail');
+  const ev1rea = get('ev1-reason');
+  const counter = get('counter-point');
+  const counterResp = get('counter-response');
+  const conclusion = get('conclusion');
+
+  // Validation
+  if (!selectedPosition || !claim || !ev1src || !ev1det || !ev1rea) {
+    document.getElementById('val-msg').classList.add('show');
+    document.getElementById('val-msg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('val-msg').classList.remove('show');
+
+  const posLabel = selectedPosition === 'pro'
+    ? 'the argument in favor of smart recording glasses'
+    : 'the argument against smart recording glasses';
+
+  const ev2src = get('ev2-source');
+  const ev2det = get('ev2-detail');
+  const ev2rea = get('ev2-reason');
+  const ev3src = get('ev3-source');
+  const ev3det = get('ev3-detail');
+  const ev3rea = get('ev3-reason');
+  const faultyType = get('faulty-type');
+  const faultyEx = get('faulty-example');
+
+  let draft = '';
+
+  // ── Paragraph 1: Introduction + Claim ──
+  draft += 'PARAGRAPH 1 — Introduction and Claim\n';
+  draft += '─'.repeat(50) + '\n';
+  draft += `The passage "Clear Vision or Clouded Privacy?" presents two sides of the debate over smart recording glasses. After reading both arguments carefully, I believe that ${posLabel} is more convincing. ${claim}\n`;
+
+  // ── Paragraph 2: Evidence 1 ──
+  draft += '\n\nPARAGRAPH 2 — First Piece of Evidence\n';
+  draft += '─'.repeat(50) + '\n';
+  draft += `One strong piece of evidence that supports my position comes from ${ev1src}. According to the passage, ${ev1det}. ${ev1rea}`;
+
+  // ── Paragraph 3: Evidence 2 (if filled in) ──
+  if (ev2src && ev2det && ev2rea) {
+    draft += '\n\nPARAGRAPH 3 — Second Piece of Evidence\n';
+    draft += '─'.repeat(50) + '\n';
+    draft += `A second piece of evidence that strengthens this position comes from ${ev2src}. The passage states that ${ev2det}. ${ev2rea}`;
+  }
+
+  // ── Evidence 3 (if filled in) ──
+  if (ev3src && ev3det && ev3rea) {
+    draft += '\n\nPARAGRAPH 4 — Third Piece of Evidence\n';
+    draft += '─'.repeat(50) + '\n';
+    draft += `Additionally, ${ev3src} provides further support. ${ev3det}. ${ev3rea}`;
+  }
+
+  // ── Counterargument paragraph ──
+  const counterParaNum = (ev2src && ev2rea ? (ev3src && ev3rea ? 5 : 4) : 3);
+  draft += `\n\nPARAGRAPH ${counterParaNum} — The Other Side\n`;
+  draft += '─'.repeat(50) + '\n';
+  if (counter) {
+    draft += `It is important to acknowledge that the opposing argument makes at least one valid point. ${counter}`;
+    if (counterResp) {
+      draft += ` However, ${counterResp}`;
+    }
+  } else {
+    draft += `While the opposing argument presents some points worth considering, none of them are supported by the same quality of evidence as the position I have taken.`;
+  }
+
+  // ── Faulty reasoning (if identified) ──
+  const lowerFaulty = faultyType.toLowerCase();
+  const hasFaulty = faultyType && lowerFaulty !== 'none' && lowerFaulty !== 'none identified' && lowerFaulty !== 'n/a';
+  if (hasFaulty && faultyEx) {
+    draft += ` Furthermore, the opposing argument uses faulty reasoning — specifically, ${faultyType.toLowerCase()}. ${faultyEx} This type of reasoning weakens the argument because it relies on logic that does not hold up under scrutiny, rather than on factual evidence.`;
+  }
+
+  // ── Conclusion ──
+  const concParaNum = counterParaNum + 1;
+  draft += `\n\nPARAGRAPH ${concParaNum} — Conclusion\n`;
+  draft += '─'.repeat(50) + '\n';
+  if (conclusion) {
+    draft += conclusion;
+  } else {
+    draft += `In conclusion, the evidence presented in the passage clearly supports the position that ${posLabel} is the stronger argument. The specific data and sourced evidence on this side of the debate make a more convincing case than the opposing argument provides.`;
+  }
+
+  draft += '\n\n' + '─'.repeat(50) + '\n';
+  draft += '[ End of draft — this is your planning scaffold. Revise and expand in your own words. ]';
+
+  document.getElementById('output-box').textContent = draft;
+  document.getElementById('output-section').style.display = 'block';
+  document.getElementById('copy-btn').textContent = 'Copy to clipboard';
+  document.getElementById('copy-btn').classList.remove('copied');
+
+  setTimeout(() => {
+    document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+async function copyOutput() {
+  const text = document.getElementById('output-box').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied! Now open a new tab and go to docs.new';
+    btn.classList.add('copied');
+  } catch (e) {
+    // Fallback for tablets
+    const box = document.getElementById('output-box');
+    const range = document.createRange();
+    range.selectNodeContents(box);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied! Now open a new tab and go to docs.new';
+    btn.classList.add('copied');
+  }
+}
+
+function startOver() {
+  document.getElementById('output-section').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
