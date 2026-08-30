@@ -79,6 +79,17 @@
             margin-bottom: 1rem;
         }
 
+        /* ── SECTION HEADERS ── */
+        .section-header {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: .04em;
+            color: var(--ink);
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
         /* ── INTERACTIVE GRID ── */
         .interactive-grid {
             display: grid;
@@ -213,6 +224,10 @@
             .interactive-grid {
                 grid-template-columns: 1fr;
             }
+
+            .section-header {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -240,6 +255,8 @@
         </ul>
     </div>
 
+    <!-- MAKING YOUR CASE THROUGH LANGUAGE ARTS SECTION -->
+    <h2 class="section-header">Making Your Case Through Language Arts</h2>
     <div class="interactive-grid">
 
         <!-- Evidence Analyst -->
@@ -272,17 +289,23 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- EXPLAINING EVERYDAY SCIENCE SECTION -->
+    <h2 class="section-header">Explaining Everyday Science</h2>
+    <div class="interactive-grid">
+
         <!-- GED Welcome Module -->
         <div class="interactive-card">
             <div class="card-header">
-                <div class="card-emoji">👋</div>
-                GED Welcome
+                <div class="card-emoji">🔬</div>
+                Science Basics
             </div>
             <div class="card-body">
                 <div class="card-description">
-                    Get started with GED Interactives! An orientation module to help you understand how to use these learning tools effectively.
+                    Build foundational science knowledge with interactive explanations and real-world applications that help you understand everyday phenomena.
                 </div>
-                <div class="card-meta">Orientation · Self-paced · 10 min</div>
+                <div class="card-meta">GED Science · Self-paced · Flexible</div>
                 <a href="hello-ged.html" class="card-link">Launch Activity →</a>
             </div>
         </div>
