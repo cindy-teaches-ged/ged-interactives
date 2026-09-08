@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GED/HiSET Interactives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1A1A2E;
+            --paper: #F8F6F1;
+            --accent: #2D5BE3;
+            --accent-light: #E8EEFB;
+            --highlight-green: #1B7F4E;
+            --green-bg: #D6F0E3;
+            --muted: #6B7280;
+            --border: #DDD8CF;
+            --radius: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--ink);
+            color: #fff;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #A0A8C0;
+            text-decoration: none;
+            font-size: 13.5px;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover { color: #fff; }
+
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            letter-spacing: .06em;
+            color: #FFD166;
+            line-height: 1;
+            margin-bottom: .5rem;
+        }
+
+        .header-sub {
+            font-size: 15px;
+            color: #A0A8C0;
+            letter-spacing: .02em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem;
+        }
+
+        .subgroup-header {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--accent);
+            margin: 0 0 .9rem 0;
+        }
+
+        .subgroup-header:not(:first-child) { margin-top: 2.5rem; }
+
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .interactive-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all .3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .interactive-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(45, 91, 227, .12);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--accent) 0%, #1E45C5 100%);
+            color: white;
+            padding: 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: .04em;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .card-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: .65rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background .2s ease;
+            text-align: center;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .card-link:hover { background: #1E45C5; }
+
+        .card-emoji { font-size: 2.5rem; margin-bottom: .5rem; }
+
+        .empty-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14.5px;
+            padding: 2.5rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .interactive-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" class="back-link">← All Subjects</a>
+    <div class="header-title" id="subjectTitle">Loading…</div>
+    <div class="header-sub" id="subjectSub"></div>
+</div>
+
+<div class="container" id="subjectContainer"></div>
+
+<footer>
+    <p>© 2026 GED Interactives. All rights reserved. Designed for GED learners.</p>
+</footer>
+
+<script src="activities.js"></script>
+<script>
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
+
+function cardHtml(a) {
+  return `
+    <div class="interactive-card">
+        <div class="card-header">
+            <div class="card-emoji">${a.icon || ''}</div>
+            ${escapeHtml(a.title)}
+        </div>
+        <div class="card-body">
+            <div class="card-description">${escapeHtml(a.description)}</div>
+            <div class="card-meta">${escapeHtml(a.meta)}</div>
+            <a href="${a.url}" class="card-link">Launch Activity →</a>
+        </div>
+    </div>`;
+}
+
+function render() {
+  const params = new URLSearchParams(window.location.search);
+  const key = params.get('key');
+  const subject = SUBJECTS.find(s => s.key === key);
+  const container = document.getElementById('subjectContainer');
+
+  if (!subject) {
+    document.getElementById('subjectTitle').textContent = 'Subject Not Found';
+    document.getElementById('subjectSub').textContent = 'Head back and pick a subject from the list.';
+    container.innerHTML = '<div class="empty-note">No subject matches that link. Check activities.js for the correct key, or go back to All Subjects above.</div>';
+    return;
+  }
+
+  document.title = subject.name + ' — GED/HiSET Interactives';
+  document.getElementById('subjectTitle').textContent = subject.name;
+  document.getElementById('subjectSub').textContent = subject.description;
+
+  const items = ACTIVITIES.filter(a => a.subject === subject.key);
+  if (items.length === 0) {
+    container.innerHTML = '<div class="empty-note">No activities here yet — add one to ACTIVITIES in activities.js with subject: "' + escapeHtml(subject.key) + '".</div>';
+    return;
+  }
+
+  // Group activities in the order each group first appears.
+  const groupOrder = [];
+  const groups = {};
+  items.forEach(a => {
+    const g = a.group || 'Activities';
+    if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
+    groups[g].push(a);
+  });
+
+  container.innerHTML = groupOrder.map(g => `
+    <div class="subgroup-header">${escapeHtml(g)}</div>
+    <div class="interactive-grid">
+      ${groups[g].map(cardHtml).join('')}
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+
+</body>
+</html>
