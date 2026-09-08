@@ -56,6 +56,33 @@
             margin: 0 auto;
         }
 
+        /* ── SUBJECT NAV ── */
+        .subject-nav {
+            display: flex;
+            justify-content: center;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .subject-nav a {
+            display: inline-block;
+            padding: .55rem 1.1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.25);
+            color: #fff;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            transition: background .2s ease, border-color .2s ease;
+        }
+
+        .subject-nav a:hover {
+            background: rgba(255,255,255,.1);
+            border-color: rgba(255,255,255,.5);
+        }
+
         /* ── MAIN CONTENT ── */
         .container {
             max-width: 1000px;
@@ -85,9 +112,28 @@
             font-size: 2rem;
             letter-spacing: .04em;
             color: var(--ink);
-            margin: 2.5rem 0 1.5rem 0;
+            margin: 3rem 0 1.5rem 0;
             padding-bottom: 0.75rem;
             border-bottom: 3px solid var(--accent);
+            scroll-margin-top: 1.5rem;
+        }
+
+        .section-header:first-of-type {
+            margin-top: 2.5rem;
+        }
+
+        /* ── SUB-GROUP HEADERS (within a subject) ── */
+        .subgroup-header {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--accent);
+            margin: 1.75rem 0 .9rem 0;
+        }
+
+        .subgroup-header:first-of-type {
+            margin-top: 0;
         }
 
         /* ── INTERACTIVE GRID ── */
@@ -95,7 +141,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .interactive-card {
@@ -236,6 +282,10 @@
 <div class="header">
     <div class="header-title">GED Interactives</div>
     <div class="header-sub">Master GED/HiSET skills with interactive learning activities — designed for practice and mastery.</div>
+    <nav class="subject-nav">
+        <a href="#language-arts">Language Arts</a>
+        <a href="#science">Science</a>
+    </nav>
 </div>
 
 <div class="container">
@@ -253,7 +303,9 @@
     </div>
 
     <!-- MAKING YOUR CASE THROUGH LANGUAGE ARTS SECTION -->
-    <h2 class="section-header">Making Your Case Through Language Arts</h2>
+    <h2 class="section-header" id="language-arts">Making Your Case Through Language Arts</h2>
+
+    <div class="subgroup-header">Argument &amp; Evidence</div>
     <div class="interactive-grid">
 
         <!-- Evidence Analyst -->
@@ -271,6 +323,11 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="subgroup-header">Essay Writing</div>
+    <div class="interactive-grid">
+
         <!-- Essay Builder -->
         <div class="interactive-card">
             <div class="card-header">
@@ -286,10 +343,45 @@
             </div>
         </div>
 
+        <!-- Library Funding Essay Builder -->
+        <div class="interactive-card">
+            <div class="card-header">
+                <div class="card-emoji">📚</div>
+                Library Funding Essay Builder
+            </div>
+            <div class="card-body">
+                <div class="card-description">
+                    Build a full argumentative essay on public library funding. Read paired passages side by side, then answer guiding questions to construct each paragraph.
+                </div>
+                <div class="card-meta">GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min</div>
+                <a href="EssayBuilder_LibraryFunding.html" class="card-link">Launch Activity →</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="subgroup-header">Grammar &amp; Mechanics</div>
+    <div class="interactive-grid">
+
+        <!-- Grammar Brush-Up -->
+        <div class="interactive-card">
+            <div class="card-header">
+                <div class="card-emoji">✅</div>
+                Tricky Subjects Brush-Up
+            </div>
+            <div class="card-body">
+                <div class="card-description">
+                    Review subject-verb agreement with collective nouns and indefinite pronouns, plus compound vs. complex sentences — with practice questions and instant feedback.
+                </div>
+                <div class="card-meta">HiSET Writing · 2 Concepts · 10 min</div>
+                <a href="GrammarBrushUp_HiSET_Tricky_Subjects.html" class="card-link">Launch Activity →</a>
+            </div>
+        </div>
+
     </div>
 
     <!-- EXPLAINING EVERYDAY SCIENCE SECTION -->
-    <h2 class="section-header">Explaining Everyday Science</h2>
+    <h2 class="section-header" id="science">Explaining Everyday Science</h2>
     <div class="interactive-grid">
 
         <!-- GED Welcome Module -->
