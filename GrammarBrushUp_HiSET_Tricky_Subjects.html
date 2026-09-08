@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Brush-Up — Before Tomorrow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAF7F2; --card: #FFFFFF; --border: #E4DFD5;
+  --teal: #1B8A7E; --teal-dark: #0F5C53; --amber: #C77D22;
+  --text: #2A2A28; --muted: #6B6862; --green: #2E8B57; --red: #B23A3A;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 17px; line-height: 1.7; min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.wrap { max-width: 640px; margin: 0 auto; }
+
+.header { text-align: center; margin-bottom: 1.5rem; }
+.header h1 { font-size: 1.5rem; font-weight: 700; color: var(--teal-dark); margin-bottom: .3rem; }
+.header p { color: var(--muted); font-size: 15px; }
+
+.nav-row { display: flex; gap: .5rem; margin-bottom: 1.5rem; }
+.nav-btn { flex: 1; padding: .7rem; border-radius: 10px; border: 2px solid var(--border); background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; }
+.nav-btn.active { border-color: var(--teal); color: var(--teal-dark); background: rgba(27,138,126,.06); }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 1.5rem; margin-bottom: 1.25rem; }
+
+.rule-title { font-size: 18px; font-weight: 700; color: var(--teal-dark); margin-bottom: .5rem; }
+.rule-text { font-size: 16px; margin-bottom: 1rem; }
+.example-good, .example-bad { border-radius: 10px; padding: .8rem 1rem; margin-bottom: .6rem; font-size: 15.5px; }
+.example-good { background: rgba(46,139,87,.08); border: 1px solid rgba(46,139,87,.3); }
+.example-bad { background: rgba(178,58,58,.06); border: 1px solid rgba(178,58,58,.25); }
+.example-tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .25rem; }
+.example-good .example-tag { color: var(--green); }
+.example-bad .example-tag { color: var(--red); }
+.example-good del, .example-bad del { opacity: .55; }
+.example-good ins, .example-bad ins { text-decoration: none; font-weight: 700; }
+.example-good ins { color: var(--teal-dark); }
+.example-bad ins { color: var(--red); }
+
+.watch-out { background: rgba(199,125,34,.08); border: 1px solid rgba(199,125,34,.3); border-radius: 10px; padding: .9rem 1.1rem; font-size: 15px; color: var(--amber); margin-top: .5rem; }
+.watch-out b { color: #8A5A17; }
+
+.section-heading { font-size: 13px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .04em; margin: 2rem 0 .75rem; }
+.section-heading:first-child { margin-top: 0; }
+
+.continue-btn, .primary-btn { width: 100%; padding: 1rem; border-radius: 10px; border: none; background: var(--teal); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: .5rem; }
+.continue-btn:hover, .primary-btn:hover { background: var(--teal-dark); }
+
+/* Quiz */
+.progress-row { display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; color: var(--muted); margin-bottom: 1rem; }
+.q-topic { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--amber); margin-bottom: .5rem; }
+.q-text { font-size: 18px; font-weight: 600; line-height: 1.5; margin-bottom: 1.2rem; }
+.choice { display: block; width: 100%; text-align: left; background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: .85rem 1rem; margin-bottom: .65rem; font-family: 'DM Sans', sans-serif; font-size: 15.5px; color: var(--text); cursor: pointer; }
+.choice:hover { border-color: var(--teal); }
+.choice.correct { border-color: var(--green); background: rgba(46,139,87,.08); }
+.choice.incorrect { border-color: var(--red); background: rgba(178,58,58,.06); }
+.choice[disabled] { cursor: default; }
+.explain { display: none; margin-top: .5rem; padding: .9rem 1.1rem; border-radius: 10px; font-size: 15px; line-height: 1.6; }
+.explain.show { display: block; }
+.explain.right { background: rgba(46,139,87,.08); border: 1px solid rgba(46,139,87,.3); color: #205C41; }
+.explain.wrong { background: rgba(178,58,58,.06); border: 1px solid rgba(178,58,58,.25); color: #7A2A2A; }
+
+.score-title { font-size: 1.4rem; font-weight: 700; color: var(--teal-dark); text-align: center; margin-bottom: .5rem; }
+.score-num { font-size: 2.5rem; font-weight: 700; color: var(--teal); text-align: center; margin-bottom: .3rem; }
+.score-msg { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 1.25rem; }
+.miss-list { font-size: 14.5px; color: var(--muted); margin-top: .5rem; }
+.miss-list div { padding: .4rem 0; border-bottom: 1px solid var(--border); }
+.miss-list div:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1 id="pageTitle">Grammar Brush-Up</h1>
+    <p id="pageSubtitle">Two quick concepts before tomorrow — about 10 minutes.</p>
+  </div>
+  <div id="app"></div>
+</div>
+
+<script>
+const TOPICS = [
+  {
+    key: 'agreement',
+    label: 'Tricky Subjects',
+    rules: [
+      {
+        title: "Rule 1 — Words like a team feel plural, but grammatically they're one unit.",
+        text: "Words like committee, company, board, team, family, and staff name a group. Even though a group has many people in it, the group itself is treated as one thing — so it takes a singular verb (is, has, announces — not are, have, announce).",
+        good: { tag: 'Correct', text: 'The <b>committee</b> <ins>has approved</ins> the new schedule.' },
+        bad: { tag: 'Incorrect', text: 'The <b>committee</b> <del>have approved</del> the new schedule.' },
+        watch: "Quick test: could you replace the group word with \"it\"? If \"it has approved\" sounds right, the group word needs a singular verb too."
+      },
+      {
+        title: 'Rule 2 — Each, every, either, and neither are always singular — no exceptions.',
+        text: "Even when the sentence goes on to name several people or things, words like each, every, either, and neither are always singular by themselves. They take a singular verb and a singular pronoun (it/its), never a plural one.",
+        good: { tag: 'Correct', text: '<b>Each</b> of the students <ins>has turned in</ins> her assignment.' },
+        bad: { tag: 'Incorrect', text: '<b>Each</b> of the students <del>have turned in</del> their assignment.' },
+        watch: "Watch out: the words right after \"each\" or \"every\" (like \"of the students\") are plural and can trick your ear. Focus on each/every itself, not the words next to it."
+      },
+      {
+        title: "Rule 3 — A true plural subject just uses the plain verb — don't add an extra 'helper.'",
+        text: "When the subject really is plural (dogs, results, students, cars), the matching verb is the plain, no-\"s\" form. If a verb already sounds wrong, the fix is usually simpler than you'd expect — not a fancier verb phrase, just the plain plural form.",
+        good: { tag: 'Correct', text: 'The <b>results</b> <ins>show</ins> a clear pattern.' },
+        bad: { tag: 'Incorrect', text: 'The <b>results</b> <del>has shown</del> a clear pattern.' },
+        watch: "Watch out: if you spot an error, don't just swap in a different singular-sounding fix (like \"has shown\"). Ask what the actual subject is first — here it's the plural \"results,\" not \"the experiment\" — then match it with a plain plural verb."
+      },
+    ]
+  },
+  {
+    key: 'sentences',
+    label: 'Compound vs. Complex',
+    rules: [
+      {
+        title: 'Rule 1 — A compound sentence joins two complete thoughts as equals.',
+        text: "A compound sentence is two independent clauses (each one could stand alone as its own sentence) joined by a comma and a connecting word like and, but, or, or so.",
+        good: { tag: 'Compound sentence', text: '<ins>The library extended its hours,</ins> <b>and</b> <ins>patron visits increased.</ins>' },
+        bad: null,
+        watch: "Test: cover up the connecting word. If both halves still work as their own complete sentence, it's compound."
+      },
+      {
+        title: 'Rule 2 — A complex sentence pairs one complete thought with one incomplete thought.',
+        text: "A complex sentence has one independent clause (a complete thought) and one dependent clause (starts with a word like although, because, since, when, if, while, after, or unless — and can't stand alone).",
+        good: { tag: 'Complex sentence', text: '<b>Although</b> <ins>the library extended its hours,</ins> <ins>patron visits did not increase.</ins>' },
+        bad: null,
+        watch: "Test: cover up the clause starting with although/because/since/etc. If that piece sounds unfinished on its own, it's the dependent clause — and the sentence is complex."
+      },
+    ]
+  }
+];
+
+const QUESTIONS = [
+  // --- Tricky subjects ---
+  {
+    topic: 'Tricky Subjects',
+    prompt: "The design team [is reviewing] every proposal before the deadline on Friday.",
+    choices: [
+      { text: 'is reviewing (no change)', correct: true },
+      { text: 'are reviewing', correct: false },
+      { text: 'have been reviewing', correct: false },
+      { text: 'were reviewing', correct: false },
+    ],
+    explain: "\"Team\" is a collective noun — one group, one unit — so it takes the singular \"is reviewing.\" No change needed."
+  },
+  {
+    topic: 'Tricky Subjects',
+    prompt: "Neither of the applicants [have submitted] their references yet.",
+    choices: [
+      { text: 'have submitted (no change)', correct: false },
+      { text: 'has submitted', correct: true },
+      { text: 'submit', correct: false },
+      { text: 'are submitting', correct: false },
+    ],
+    explain: "\"Neither\" is always singular, even though \"of the applicants\" sounds plural. It needs \"has submitted,\" not \"have submitted.\""
+  },
+  {
+    topic: 'Tricky Subjects',
+    prompt: "The new safety regulations [effects] how warehouse staff handle equipment.",
+    choices: [
+      { text: 'effects (no change)', correct: false },
+      { text: 'has effected', correct: false },
+      { text: 'affect', correct: true },
+      { text: 'is affecting', correct: false },
+    ],
+    explain: "The real subject is the plural \"regulations,\" so it just needs the plain plural verb \"affect\" — not a fancier singular-sounding fix."
+  },
+  {
+    topic: 'Tricky Subjects',
+    prompt: "Every employee in the two departments [need] to complete the training by June.",
+    choices: [
+      { text: 'need (no change)', correct: false },
+      { text: 'needs', correct: true },
+      { text: 'are needing', correct: false },
+      { text: 'have needed', correct: false },
+    ],
+    explain: "\"Every\" is always singular, no matter how many employees or departments are mentioned afterward. It needs \"needs.\""
+  },
+  {
+    topic: 'Tricky Subjects',
+    prompt: "The nonprofit announced that [they] would open a second location downtown.",
+    choices: [
+      { text: 'they (no change)', correct: false },
+      { text: 'it', correct: true },
+      { text: 'them', correct: false },
+      { text: 'those', correct: false },
+    ],
+    explain: "\"Nonprofit\" is one organization — a singular collective noun — so it should be referred to as \"it,\" not the plural \"they.\""
+  },
+  {
+    topic: 'Tricky Subjects',
+    prompt: "Either the printer or the scanners in the front office [needs] to be replaced this year.",
+    choices: [
+      { text: 'needs (no change)', correct: false },
+      { text: 'need', correct: true },
+      { text: 'has needed', correct: false },
+      { text: 'is needing', correct: false },
+    ],
+    explain: "With either/or, the verb matches whichever noun is closer to it — here that's the plural \"scanners,\" so the verb should be \"need.\""
+  },
+  // --- Compound vs Complex ---
+  {
+    topic: 'Compound vs. Complex',
+    prompt: "Which sentence is COMPLEX?",
+    choices: [
+      { text: 'The manager reviewed the budget, and the team approved it the same day.', correct: false },
+      { text: 'Because the budget was under review, the team could not approve any new spending.', correct: true },
+      { text: 'The manager reviewed the budget, but the team had questions.', correct: false },
+      { text: 'The manager reviewed the budget, so the team approved it.', correct: false },
+    ],
+    explain: "Only this option opens with a dependent clause (\"Because the budget was under review\") that can't stand alone — that's the mark of a complex sentence. The others just join two complete sentences with and/but/so, which makes them compound."
+  },
+  {
+    topic: 'Compound vs. Complex',
+    prompt: "Which sentence is COMPOUND?",
+    choices: [
+      { text: 'Although the flight was delayed, the passengers remained calm.', correct: false },
+      { text: 'The flight was delayed, but the passengers remained calm.', correct: true },
+      { text: 'Since the flight was delayed, the passengers missed their connection.', correct: false },
+      { text: 'While the flight was delayed, the crew rebooked several passengers.', correct: false },
+    ],
+    explain: "This is the only one joining two complete sentences with a comma + \"but.\" The rest start with although/since/while — words that create a dependent clause, making those sentences complex."
+  },
+  {
+    topic: 'Compound vs. Complex',
+    prompt: "\"Since the store changed its return policy.\" — Which revision fixes this fragment?",
+    choices: [
+      { text: 'Since the store changed its return policy, customer complaints increased.', correct: true },
+      { text: 'The store changed, since its return policy.', correct: false },
+      { text: 'Since the store, changed its return policy.', correct: false },
+      { text: 'The store changed its return policy since.', correct: false },
+    ],
+    explain: "\"Since the store changed its return policy\" is a dependent clause — it needs a complete, independent clause attached to it to finish the thought. Only the first option adds one."
+  },
+  {
+    topic: 'Compound vs. Complex',
+    prompt: "Which sentence is COMPLEX?",
+    choices: [
+      { text: 'The city repaved the road, and traffic improved noticeably.', correct: false },
+      { text: 'The city repaved the road, so traffic improved noticeably.', correct: false },
+      { text: 'When the city repaved the road, traffic improved noticeably.', correct: true },
+      { text: 'The city repaved the road, yet traffic barely improved.', correct: false },
+    ],
+    explain: "\"When the city repaved the road\" is a dependent clause — it can't stand alone. That makes this one complex; the others pair two independent clauses with and/so/yet, which is compound."
+  },
+];
+
+let route = { screen: 'topic0' };
+let quizIndex = 0;
+let score = 0;
+let missed = [];
+let answered = false;
+
+const app = document.getElementById('app');
+const pageTitle = document.getElementById('pageTitle');
+const pageSubtitle = document.getElementById('pageSubtitle');
+
+function render() {
+  if (route.screen === 'topic0') return renderTopic(0);
+  if (route.screen === 'topic1') return renderTopic(1);
+  if (route.screen === 'quiz') return renderQuiz();
+  if (route.screen === 'score') return renderScore();
+}
+
+function navRow(activeIdx) {
+  let html = '<div class="nav-row">';
+  TOPICS.forEach((t, i) => {
+    html += `<div class="nav-btn ${i === activeIdx ? 'active' : ''}" onclick="goTopic(${i})">${t.label}</div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function goTopic(i) { route = { screen: 'topic' + i }; render(); }
+function goQuiz() { route = { screen: 'quiz' }; quizIndex = 0; score = 0; missed = []; answered = false; render(); }
+
+function renderTopic(idx) {
+  const topic = TOPICS[idx];
+  pageTitle.textContent = 'Grammar Brush-Up';
+  pageSubtitle.textContent = 'Read each rule, then move to practice.';
+
+  let html = navRow(idx);
+  html += `<div class="section-heading">${topic.label} — the rules</div>`;
+
+  topic.rules.forEach(r => {
+    html += `<div class="card">
+        <div class="rule-title">${r.title}</div>
+        <div class="rule-text">${r.text}</div>
+        <div class="example-good"><div class="example-tag">${r.good.tag}</div>${r.good.text}</div>`;
+    if (r.bad) {
+      html += `<div class="example-bad"><div class="example-tag">${r.bad.tag}</div>${r.bad.text}</div>`;
+    }
+    html += `<div class="watch-out">${r.watch}</div>
+      </div>`;
+  });
+
+  if (idx < TOPICS.length - 1) {
+    html += `<button class="continue-btn" onclick="goTopic(${idx + 1})">Next: ${TOPICS[idx + 1].label} →</button>`;
+  } else {
+    html += `<button class="primary-btn" onclick="goQuiz()">Start Practice Questions</button>`;
+  }
+  app.innerHTML = html;
+}
+
+function renderQuiz() {
+  const q = QUESTIONS[quizIndex];
+  pageTitle.textContent = 'Practice';
+  pageSubtitle.textContent = `Question ${quizIndex + 1} of ${QUESTIONS.length}`;
+  answered = false;
+
+  let html = `<div class="progress-row"><span>Score so far: ${score}/${quizIndex}</span><span>${quizIndex + 1} / ${QUESTIONS.length}</span></div>`;
+  html += `<div class="q-topic">${q.topic}</div>`;
+  html += `<div class="q-text">${q.prompt}</div>`;
+  q.choices.forEach((c, i) => {
+    html += `<button class="choice" id="choice${i}" onclick="selectChoice(${i})">${c.text}</button>`;
+  });
+  html += `<div class="explain" id="explainBox"></div>`;
+  app.innerHTML = html;
+}
+
+function selectChoice(i) {
+  if (answered) return;
+  answered = true;
+  const q = QUESTIONS[quizIndex];
+  const isCorrect = q.choices[i].correct;
+  if (isCorrect) score++;
+  else missed.push(q.prompt);
+
+  q.choices.forEach((c, idx) => {
+    const btn = document.getElementById('choice' + idx);
+    btn.disabled = true;
+    if (c.correct) btn.classList.add('correct');
+    else if (idx === i) btn.classList.add('incorrect');
+  });
+
+  const box = document.getElementById('explainBox');
+  box.classList.add('show', isCorrect ? 'right' : 'wrong');
+  box.innerHTML = (isCorrect ? "That's right. " : "Not quite. ") + q.explain +
+    `<button class="primary-btn" style="margin-top:1rem" onclick="nextQuestion()">${quizIndex === QUESTIONS.length - 1 ? 'See My Score' : 'Next Question'}</button>`;
+}
+
+function nextQuestion() {
+  quizIndex++;
+  if (quizIndex >= QUESTIONS.length) {
+    route = { screen: 'score' };
+  }
+  render();
+}
+
+function renderScore() {
+  pageTitle.textContent = 'All Done';
+  pageSubtitle.textContent = '';
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  let msg = "Great work — this looks solid for tomorrow.";
+  if (pct < 70) msg = "A few of these are still shaky — worth one more read through the rules above.";
+  else if (pct < 90) msg = "Good progress — skim the rules for anything you missed, then you're set.";
+
+  let html = `<div class="card">
+      <div class="score-title">Practice Complete</div>
+      <div class="score-num">${score} / ${QUESTIONS.length}</div>
+      <div class="score-msg">${msg}</div>`;
+  if (missed.length > 0) {
+    html += `<div class="miss-list"><b>Questions to revisit:</b>`;
+    missed.forEach(m => { html += `<div>${m}</div>`; });
+    html += `</div>`;
+  }
+  html += `</div>`;
+  html += `<button class="continue-btn" onclick="goTopic(0)">Review the Rules Again</button>`;
+  html += `<button class="continue-btn" style="background:var(--amber)" onclick="goQuiz()">Retake Practice Questions</button>`;
+  app.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>

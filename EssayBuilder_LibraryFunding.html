@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Essay — Library Funding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAF7F2; --card: #FFFFFF; --border: #E4DFD5;
+  --teal: #1B8A7E; --teal-dark: #0F5C53; --amber: #C77D22;
+  --text: #2A2A28; --muted: #6B6862; --green: #2E8B57;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 17px; line-height: 1.7; min-height: 100vh; }
+
+.layout { display: flex; flex-direction: column; min-height: 100vh; }
+@media (min-width: 900px) {
+  .layout { flex-direction: row; align-items: flex-start; }
+  .passages-panel { position: sticky; top: 0; height: 100vh; overflow-y: auto; width: 46%; flex: 0 0 46%; }
+  .builder-panel { width: 54%; flex: 1; height: 100vh; overflow-y: auto; }
+}
+
+.passages-panel { background: #F3EFE6; border-right: 1px solid var(--border); padding: 1.5rem 1.5rem 3rem; }
+.passages-toggle { display: none; }
+@media (max-width: 899px) {
+  .passages-panel { max-height: 46vh; overflow-y: auto; border-right: none; border-bottom: 3px solid var(--teal); }
+  .passages-toggle { display: block; width: 100%; padding: .85rem; margin-bottom: 0; border: none; background: var(--teal-dark); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .passages-panel.collapsed { max-height: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; border-bottom: none; }
+}
+
+.passages-title { font-size: 1.15rem; font-weight: 700; color: var(--teal-dark); margin-bottom: .75rem; }
+.passage-block { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+.passage-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--amber); margin-bottom: .3rem; }
+.passage-heading { font-size: 15px; font-weight: 700; margin-bottom: .6rem; }
+.passage-block p { font-size: 14.5px; line-height: 1.65; color: var(--text); margin-bottom: .7rem; }
+.passage-block p:last-child { margin-bottom: 0; }
+
+.builder-panel { padding: 1.5rem 1rem 3rem; }
+.wrap { max-width: 640px; margin: 0 auto; }
+
+.header { text-align: center; margin-bottom: 1.5rem; }
+.header h1 { font-size: 1.5rem; font-weight: 700; color: var(--teal-dark); margin-bottom: .3rem; }
+.header p { color: var(--muted); font-size: 15px; }
+
+.dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 2rem; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background .2s; }
+.dot.active { background: var(--teal); width: 24px; border-radius: 5px; }
+.dot.done { background: var(--green); }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem 1.5rem; margin-bottom: 1.25rem; }
+.q-label { font-size: 13px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .6rem; }
+.q-text { font-size: 19px; font-weight: 600; line-height: 1.5; margin-bottom: .3rem; }
+.sentence-hint { font-size: 13.5px; color: var(--muted); margin-bottom: .9rem; }
+.quote-note { background: rgba(199,125,34,.08); border: 1px solid rgba(199,125,34,.3); border-radius: 8px; padding: .7rem .9rem; font-size: 13.5px; color: var(--amber); margin-bottom: .9rem; }
+textarea { width: 100%; min-height: 90px; padding: .85rem 1rem; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); resize: vertical; }
+textarea:focus { outline: none; border-color: var(--teal); }
+.error { color: #B23A3A; font-size: 14px; margin-top: .5rem; display: none; }
+.error.show { display: block; }
+.multi-warning { display: none; background: rgba(199,125,34,.1); border: 1px solid rgba(199,125,34,.35); border-radius: 8px; padding: .65rem .85rem; font-size: 13.5px; color: var(--amber); margin-top: .6rem; }
+.multi-warning.show { display: block; }
+
+.btn-row { display: flex; gap: .75rem; margin-top: 1.25rem; }
+.btn { flex: 1; padding: .9rem 1rem; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; min-height: 48px; }
+.btn-primary { background: var(--teal); color: #fff; }
+.btn-primary:hover { background: var(--teal-dark); }
+.btn-secondary { background: transparent; border: 2px solid var(--border); color: var(--muted); flex: 0 0 auto; padding-left: 1.5rem; padding-right: 1.5rem; }
+.btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+.result-card { background: var(--card); border: 2px solid var(--teal); border-radius: var(--radius); padding: 1.75rem 1.5rem; margin-bottom: 1.5rem; }
+.result-title { font-size: 15px; font-weight: 700; color: var(--teal-dark); margin-bottom: 1rem; }
+.result-para { width: 100%; min-height: 140px; padding: 1rem; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.8; color: var(--text); background: #FDFCFA; resize: vertical; }
+
+.reveal-title { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 1.75rem 0 .75rem; }
+.reveal-row { display: flex; gap: 10px; align-items: flex-start; padding: .6rem 0; border-bottom: 1px solid var(--border); }
+.reveal-row:last-child { border-bottom: none; }
+.reveal-tag { flex: 0 0 140px; font-size: 13px; font-weight: 700; color: var(--amber); }
+.reveal-txt { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+
+.copy-btn { width: 100%; padding: 1rem; border-radius: 10px; border: none; background: var(--teal); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: .5rem; min-height: 48px; }
+.copy-btn:hover { background: var(--teal-dark); }
+.copy-btn.copied { background: var(--green); }
+.copy-help { font-size: 13.5px; color: var(--muted); margin-top: .6rem; text-align: center; margin-bottom: 1.5rem; }
+
+.text-btn { display: block; width: 100%; text-align: center; margin-top: 1rem; padding: .75rem; border-radius: 10px; border: 2px solid var(--border); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer; }
+.text-btn:hover { border-color: var(--muted); color: var(--text); }
+
+.preview-box { background: rgba(27,138,126,.06); border: 1px dashed var(--teal); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; font-size: 15px; line-height: 1.7; color: var(--teal-dark); display: none; }
+.preview-box.show { display: block; }
+.preview-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--teal); margin-bottom: .5rem; }
+.preview-draft { color: var(--muted); font-style: italic; }
+
+.back-link { display: inline-block; margin-bottom: 1rem; color: var(--muted); font-size: 14px; cursor: pointer; text-decoration: underline; }
+.back-link:hover { color: var(--text); }
+
+.section-list { display: flex; flex-direction: column; gap: .85rem; margin-bottom: 1.5rem; }
+.section-card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.4rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: border-color .15s; }
+.section-card:hover { border-color: var(--teal); }
+.section-card.complete { border-color: rgba(46,139,87,.4); background: rgba(46,139,87,.05); }
+.section-name { font-size: 17px; font-weight: 600; }
+.section-status { font-size: 13px; font-weight: 600; padding: .3rem .8rem; border-radius: 20px; background: var(--border); color: var(--muted); }
+.section-status.progress { background: rgba(199,125,34,.15); color: var(--amber); }
+.section-status.complete { background: rgba(46,139,87,.15); color: var(--green); }
+
+.essay-btn { width: 100%; padding: 1.1rem; border-radius: var(--radius); border: none; background: var(--teal-dark); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: .5rem; }
+.essay-btn:hover { background: #0A4A43; }
+
+.essay-missing { background: rgba(199,125,34,.08); border: 1px solid rgba(199,125,34,.3); border-radius: 10px; padding: 1rem 1.1rem; font-size: 14.5px; color: var(--amber); margin-bottom: 1.25rem; }
+.save-warning { background: rgba(178,58,58,.08); border: 2px solid rgba(178,58,58,.35); border-radius: 10px; padding: 1.1rem 1.25rem; font-size: 15px; color: #8A2E2E; margin-bottom: 1.25rem; font-weight: 600; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <button class="passages-toggle" id="passagesToggle" onclick="togglePassages()">Hide Passages ▲</button>
+  <div class="passages-panel" id="passagesPanel">
+    <div class="passages-title">Should Public Libraries Shift Funding Toward Digital Resources?</div>
+
+    <div class="passage-block">
+      <div class="passage-label">Passage C — In Favor of Shifting to Digital</div>
+      <p>Public libraries were designed to provide communities with free access to information. For most of the 20th century, that meant shelves of printed books, periodicals, and reference materials. But information no longer lives primarily on paper. Today, more than 85 percent of Americans have access to the internet at home, and digital content — e-books, audiobooks, online databases, and streaming media — has become the dominant way people consume information. Libraries that fail to adapt to this shift risk becoming irrelevant.</p>
+      <p>The data supports this transition. A 2023 report from the American Library Association found that e-book and audiobook checkouts increased by 33 percent over the previous five years, while physical book circulation declined by 14 percent in the same period. Libraries in cities like San Antonio and Columbus that invested heavily in digital platforms saw total patron engagement increase by over 20 percent, even as in-person visits leveled off. These numbers suggest that patrons are not abandoning libraries — they are using them differently.</p>
+      <p>Digital resources also address equity concerns more effectively than physical collections. A printed book can serve one reader at a time. A digital resource can serve dozens simultaneously. For patrons with disabilities, digital formats offer text-to-speech, adjustable font sizes, and screen reader compatibility — features that print books cannot provide. For working parents and shift workers who cannot visit a branch during operating hours, digital access means the library is available 24 hours a day.</p>
+      <p>Critics argue that shifting funds away from physical books will harm communities that depend on in-person library services. This concern deserves acknowledgment, but it does not require libraries to freeze their budgets in the past. A responsible transition does not eliminate physical resources — it reallocates funds to reflect how patrons are actually using the library. Every dollar spent maintaining a collection that fewer people use is a dollar not spent reaching the patrons who have already moved online.</p>
+    </div>
+
+    <div class="passage-block">
+      <div class="passage-label">Passage D — Against Shifting to Digital</div>
+      <p>The movement to redirect public library funding toward digital resources rests on an assumption that sounds modern but is dangerously incomplete: that because digital content is growing in popularity, it should receive a growing share of public investment. This logic ignores who libraries serve, how they serve them, and what would be lost if physical collections and in-person services were deprioritized.</p>
+      <p>Public libraries are not simply content delivery systems. They are physical spaces where communities gather, where children attend story hours, where adults take literacy classes, and where people experiencing homelessness access the only climate-controlled, safe public space available to them. A 2022 study by the Institute of Museum and Library Services found that libraries in low-income neighborhoods reported 40 percent more in-person visits per capita than libraries in higher-income areas. These patrons are not choosing between print and digital — they depend on the physical library because they have no alternative.</p>
+      <p>The digital divide remains a significant barrier. While proponents of digital funding cite high national internet access rates, those averages obscure deep disparities. The Federal Communications Commission reported that approximately 24 million Americans — disproportionately in rural areas, tribal communities, and low-income urban neighborhoods — still lack reliable broadband access. Shifting library funds toward digital resources effectively redirects public money away from the people who need public libraries the most and toward patrons who already have other options.</p>
+      <p>There is also a question of cost sustainability. E-book licensing agreements require libraries to repurchase access after a set number of checkouts — typically 26 loans or two years, whichever comes first. A single printed book, by contrast, can circulate for decades at no additional cost beyond occasional repair. The Panorama Project, a library industry research initiative, found that libraries spend an average of 45 percent more per title on digital content than on physical copies over a ten-year period. Framing digital investment as cost-effective ignores these long-term realities.</p>
+      <p>Libraries should absolutely offer digital resources. But redirecting core funding away from physical services and collections would disproportionately harm the most vulnerable patrons — the very people public libraries were created to serve.</p>
+    </div>
+  </div>
+
+  <div class="builder-panel">
+    <div class="wrap">
+      <div class="header">
+        <h1 id="pageTitle">Build Your Essay</h1>
+        <p id="pageSubtitle">Pick a paragraph to work on. Answer in your own words — no wrong answers.</p>
+      </div>
+      <div id="app"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassages() {
+  const panel = document.getElementById('passagesPanel');
+  const btn = document.getElementById('passagesToggle');
+  panel.classList.toggle('collapsed');
+  btn.textContent = panel.classList.contains('collapsed') ? 'Show Passages ▼' : 'Hide Passages ▲';
+}
+
+const SECTIONS = [
+  { key: 'intro', label: 'Introduction', questions: [
+    { tag: 'Zoom Out', q: "What's a bigger problem, anywhere, that connects to how public services get funded — something true even beyond these two library passages?", hint: "Write this as one complete sentence.", isQuote: false },
+    { tag: 'The Contenders', q: "One passage argues libraries should shift funding toward digital resources. The other argues libraries should prioritize physical, in-person services. In your own words, what is each one actually saying?", hint: "One sentence, in your own words — don't copy text from the passages here.", isQuote: false },
+    { tag: 'Your Position', q: "Which side do you actually agree with — Passage C (digital) or Passage D (physical/in-person)?", hint: "Write this as one complete sentence.", isQuote: false },
+    { tag: 'The Bridge', q: "Why does the bigger problem from Question 1 matter here, specifically in this library funding debate?", hint: "Write this as one complete sentence.", isQuote: false },
+    { tag: 'Preview', q: "What are two reasons someone should agree with your position?", hint: "Write this as one complete sentence.", isQuote: false },
+  ]},
+  { key: 'body1', label: 'Body Paragraph 1', questions: [
+    { tag: 'Topic Sentence', q: "What is one reason (from your Introduction's Preview) that supports your position?", hint: "One sentence, in your own words.", isQuote: false },
+    { tag: 'Evidence (your words)', q: "In your own words, what fact from your chosen passage supports this reason?", hint: "One sentence, in your own words — don't copy the passage text here.", isQuote: false },
+    { tag: 'Evidence (direct quote)', q: "Now write one sentence of your own that includes a short quoted phrase from your chosen passage.", hint: "Add the quotation marks yourself, around just the part you're borrowing — the rest should be your own words. Keep the quoted part short.", isQuote: true },
+    { tag: 'Bridge', q: "Why does this evidence matter to your position?", hint: "One sentence, in your own words.", isQuote: false },
+  ]},
+  { key: 'body2', label: 'Body Paragraph 2', questions: [
+    { tag: 'Topic Sentence', q: "What is your second reason (from your Introduction's Preview) that supports your position?", hint: "One sentence, in your own words — a different reason than Body Paragraph 1.", isQuote: false },
+    { tag: 'Evidence (your words)', q: "In your own words, what fact from your chosen passage supports this second reason?", hint: "One sentence, in your own words — don't copy the passage text here.", isQuote: false },
+    { tag: 'Evidence (direct quote)', q: "Now write one sentence of your own that includes a short quoted phrase from your chosen passage.", hint: "Add the quotation marks yourself, around just the part you're borrowing — the rest should be your own words. Keep the quoted part short.", isQuote: true },
+    { tag: 'Bridge', q: "Why does this evidence matter to your position?", hint: "One sentence, in your own words.", isQuote: false },
+  ]},
+  { key: 'counter', label: 'Counterargument', questions: [
+    { tag: 'Topic Sentence', q: "What is the strongest point someone on the other side would make?", hint: "One sentence, in your own words.", isQuote: false },
+    { tag: 'Evidence (your words)', q: "In your own words, what does the other passage say to support that point?", hint: "One sentence, in your own words — don't copy the passage text here.", isQuote: false },
+    { tag: 'Evidence (direct quote)', q: "Now write one sentence of your own that includes a short quoted phrase from the other passage.", hint: "Add the quotation marks yourself, around just the part you're borrowing — the rest should be your own words. Keep the quoted part short.", isQuote: true },
+    { tag: 'Rebuttal', q: "Even with that point, why does your position still hold up?", hint: "One sentence, in your own words. A good start: \"However...\" or \"Still...\"", isQuote: false },
+  ]},
+  { key: 'conclusion', label: 'Conclusion', questions: [
+    { tag: 'Restated Position', q: "Restate your position in new words — don't just repeat your intro sentence.", hint: "One sentence, in your own words.", isQuote: false },
+    { tag: 'Recap', q: "Briefly recap your two reasons.", hint: "One sentence naming both reasons.", isQuote: false },
+    { tag: 'Final Thought', q: "End with one sentence on why this matters going forward.", hint: "One sentence, in your own words.", isQuote: false },
+  ]},
+];
+
+const state = { answers: {}, completed: {} };
+SECTIONS.forEach(s => {
+  state.answers[s.key] = new Array(s.questions.length).fill('');
+  state.completed[s.key] = false;
+});
+
+let route = { screen: 'home' };
+
+const app = document.getElementById('app');
+const pageTitle = document.getElementById('pageTitle');
+const pageSubtitle = document.getElementById('pageSubtitle');
+
+function cleanSentence(s) {
+  s = s.split(/\r?\n/).map(line => line.replace(/^\s*[•*-]\s+/, '')).join(' ').replace(/\s{2,}/g, ' ').trim();
+  if (s.length === 0) return s;
+  s = s.charAt(0).toUpperCase() + s.slice(1);
+  if (!/[.!?"'\u201D\u2019]$/.test(s)) s += '.';
+  return s;
+}
+
+function stripQuoted(s) {
+  return s.replace(/["'\u201C\u201D\u2018\u2019][^"'\u201C\u201D\u2018\u2019]*["'\u201C\u201D\u2018\u2019]/g, '');
+}
+
+function countSentenceEnds(s) {
+  const outside = stripQuoted(s);
+  const trimmed = outside.trim().replace(/[.!?]+$/, '');
+  const matches = trimmed.match(/[.!?]/g);
+  return matches ? matches.length : 0;
+}
+
+function sectionByKey(key) { return SECTIONS.find(s => s.key === key); }
+function assembledTextForSection(key) { return state.answers[key].map(cleanSentence).join(' '); }
+
+function sectionStatus(key) {
+  if (state.completed[key]) return 'complete';
+  const hasAny = state.answers[key].some(a => a.trim().length > 0);
+  return hasAny ? 'progress' : 'not-started';
+}
+
+function goHome() { route = { screen: 'home' }; render(); }
+function goQuestion(key, index) { route = { screen: 'question', section: key, index }; render(); }
+function goResult(key) { route = { screen: 'result', section: key }; render(); }
+function goEssay() { route = { screen: 'essay' }; render(); }
+
+function render() {
+  if (route.screen === 'home') return renderHome();
+  if (route.screen === 'question') return renderQuestion(route.section, route.index);
+  if (route.screen === 'result') return renderResult(route.section);
+  if (route.screen === 'essay') return renderEssay();
+}
+
+function renderHome() {
+  pageTitle.textContent = 'Build Your Essay';
+  pageSubtitle.textContent = 'Pick a paragraph to work on. Answer in your own words — no wrong answers.';
+
+  let html = `<div class="save-warning">⚠️ Read this first: nothing here is saved automatically, and your device will NOT warn you before you lose your work. Every time you finish a paragraph, copy it and paste it into your Google Form answer box before you do anything else.</div>`;
+
+  html += '<div class="section-list">';
+  SECTIONS.forEach(s => {
+    const status = sectionStatus(s.key);
+    const statusLabel = status === 'complete' ? 'Done ✓' : status === 'progress' ? 'In progress' : 'Not started';
+    const cardClass = status === 'complete' ? 'section-card complete' : 'section-card';
+    const statusClass = status === 'complete' ? 'section-status complete' : status === 'progress' ? 'section-status progress' : 'section-status';
+    html += `
+      <div class="${cardClass}" onclick="goQuestion('${s.key}', 0)">
+        <div class="section-name">${s.label}</div>
+        <div class="${statusClass}">${statusLabel}</div>
+      </div>`;
+  });
+  html += '</div>';
+  html += `<button class="essay-btn" onclick="goEssay()">See My Whole Essay So Far</button>`;
+  app.innerHTML = html;
+}
+
+function renderQuestion(key, index) {
+  const section = sectionByKey(key);
+  const q = section.questions[index];
+  pageTitle.textContent = section.label;
+  pageSubtitle.textContent = `Question ${index + 1} of ${section.questions.length}`;
+
+  const savedVal = state.answers[key][index] || '';
+  const priorText = index > 0 ? state.answers[key].slice(0, index).map(cleanSentence).join(' ') : '';
+
+  let html = `<span class="back-link" onclick="goHome()">← Back to overview</span>`;
+  html += `<div class="dots">`;
+  for (let i = 0; i < section.questions.length; i++) {
+    let cls = 'dot';
+    if (i < index) cls += ' done';
+    if (i === index) cls += ' active';
+    html += `<div class="${cls}"></div>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="preview-box ${(priorText || savedVal) ? 'show' : ''}" id="previewBox">
+      <div class="preview-label">Your paragraph so far</div>
+      ${priorText ? `<span>${escapeHtml(priorText)}</span> ` : ''}<span class="preview-draft" id="previewDraft">${escapeHtml(savedVal)}</span>
+    </div>`;
+
+  html += `<div class="card">
+      <div class="q-label">${section.label} — Part ${index + 1}</div>
+      <div class="q-text">${q.q}</div>`;
+  html += q.isQuote
+    ? `<div class="quote-note">${q.hint}</div>`
+    : `<div class="sentence-hint">${q.hint}</div>`;
+  html += `<textarea id="qInput" placeholder="Type your answer here...">${escapeHtml(savedVal)}</textarea>
+      <div class="error" id="qError">Type an answer before moving on.</div>
+      <div class="multi-warning" id="qWarning">This looks like more than one sentence${q.isQuote ? ', or the quoted part may be too long' : ''}. Try saying it in just one.</div>
+      <div class="btn-row">
+        ${index > 0 ? `<button class="btn btn-secondary" onclick="questionBack('${key}', ${index})">Back</button>` : ''}
+        <button class="btn btn-primary" onclick="questionNext('${key}', ${index})">${index === section.questions.length - 1 ? 'Build This Paragraph' : 'Next'}</button>
+      </div>
+    </div>`;
+
+  app.innerHTML = html;
+
+  const input = document.getElementById('qInput');
+  const lengthLimit = q.isQuote ? 260 : 220;
+  input.addEventListener('input', () => {
+    const val = input.value;
+    document.getElementById('previewDraft').textContent = val;
+    const warn = document.getElementById('qWarning');
+    if (countSentenceEnds(val) >= 1 || val.length > lengthLimit) warn.classList.add('show');
+    else warn.classList.remove('show');
+    document.getElementById('previewBox').classList.add('show');
+  });
+}
+
+function questionBack(key, index) {
+  const val = document.getElementById('qInput').value;
+  state.answers[key][index] = val;
+  goQuestion(key, index - 1);
+}
+
+function questionNext(key, index) {
+  const val = document.getElementById('qInput').value.trim();
+  if (val.length < 3) {
+    document.getElementById('qError').classList.add('show');
+    return;
+  }
+  state.answers[key][index] = val;
+  const section = sectionByKey(key);
+  if (index === section.questions.length - 1) {
+    state.completed[key] = true;
+    goResult(key);
+  } else {
+    goQuestion(key, index + 1);
+  }
+}
+
+function renderResult(key) {
+  const section = sectionByKey(key);
+  pageTitle.textContent = section.label + ' — Done';
+  pageSubtitle.textContent = 'Here it is, all put together.';
+
+  const fullText = assembledTextForSection(key);
+
+  let html = `<span class="back-link" onclick="goHome()">← Back to overview</span>`;
+  html += `<div class="save-warning">⚠️ Copy this now. Your device will NOT warn you before this disappears — closing the tab or letting it lock loses it for good.</div>`;
+  html += `<div class="result-card">
+      <div class="result-title">Tap inside the box, then Select All and Copy</div>
+      <textarea class="result-para" id="assembled" readonly onclick="this.focus();this.select();">${escapeHtml(fullText)}</textarea>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyText()">Copy this paragraph</button>
+    <div class="copy-help">Paste it into your Google Form answer box — right now, before you do anything else.</div>`;
+
+  html += `<div class="reveal-title">You just wrote all ${section.questions.length} parts</div>`;
+  section.questions.forEach((q, i) => {
+    html += `<div class="reveal-row"><div class="reveal-tag">${q.tag}</div><div class="reveal-txt">${escapeHtml(cleanSentence(state.answers[key][i]))}</div></div>`;
+  });
+
+  html += `<button class="text-btn" onclick="goQuestion('${key}', 0)">Redo this paragraph</button>`;
+  html += `<button class="essay-btn" onclick="goEssay()" style="margin-top:1rem">See My Whole Essay So Far</button>`;
+
+  window.__fullText = fullText;
+  app.innerHTML = html;
+}
+
+function renderEssay() {
+  pageTitle.textContent = 'Your Whole Essay So Far';
+  pageSubtitle.textContent = 'Everything you\'ve finished, all in one place.';
+
+  let html = `<span class="back-link" onclick="goHome()">← Back to overview</span>`;
+  html += `<div class="save-warning">⚠️ Copy everything now. Your device will NOT warn you before this disappears — nothing here is saved automatically.</div>`;
+
+  const missing = SECTIONS.filter(s => !state.completed[s.key]);
+  if (missing.length > 0) {
+    html += `<div class="essay-missing">Not finished yet: ${missing.map(s => s.label).join(', ')}. Those parts aren't included below.</div>`;
+  }
+
+  const finished = SECTIONS.filter(s => state.completed[s.key]);
+  let combined = '';
+  finished.forEach(s => { combined += assembledTextForSection(s.key) + '\n\n'; });
+  combined = combined.trim();
+
+  html += `<div class="result-card">
+      <div class="result-title">Tap inside the box, then Select All and Copy</div>
+      <textarea class="result-para" id="assembled" readonly style="min-height:260px" onclick="this.focus();this.select();">${escapeHtml(combined)}</textarea>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyText()">Copy my whole essay</button>
+    <div class="copy-help">If the button doesn't work, tap inside the box above, then use Select All and Copy.</div>`;
+
+  window.__fullText = combined;
+  app.innerHTML = html;
+}
+
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
+
+function copyText() {
+  const btn = document.getElementById('copyBtn');
+  const ta = document.getElementById('assembled');
+  const text = window.__fullText || '';
+  const done = () => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = btn.dataset.label || 'Copy'; btn.classList.remove('copied'); }, 1800);
+  };
+  btn.dataset.label = btn.textContent;
+
+  ta.focus();
+  ta.setSelectionRange(0, ta.value.length);
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => {
+      try { document.execCommand('copy'); done(); } catch (e) { /* text stays selected for manual copy */ }
+    });
+  } else {
+    try { document.execCommand('copy'); done(); } catch (e) { /* text stays selected for manual copy */ }
+  }
+}
+
+function hasAnyUnsavedWork() {
+  return SECTIONS.some(s => state.answers[s.key].some(a => a.trim().length > 0));
+}
+
+window.addEventListener('beforeunload', (e) => {
+  if (hasAnyUnsavedWork()) {
+    e.preventDefault();
+    e.returnValue = '';
+    return '';
+  }
+});
+
+render();
+</script>
+</body>
+</html>
