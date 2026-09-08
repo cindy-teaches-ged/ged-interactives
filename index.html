@@ -1,3 +1,7 @@
+
+/
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,28 +21,23 @@
             --border: #DDD8CF;
             --radius: 10px;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+ 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
         body {
             background: var(--paper);
             color: var(--ink);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
         }
-
-        /* ── HEADER ── */
+ 
         .header {
             background: var(--ink);
             color: #fff;
-            padding: 2rem 1.5rem;
+            padding: 3rem 1.5rem 2.5rem;
             text-align: center;
         }
-
+ 
         .header-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(2rem, 5vw, 3rem);
@@ -47,7 +46,7 @@
             line-height: 1;
             margin-bottom: .5rem;
         }
-
+ 
         .header-sub {
             font-size: 16px;
             color: #A0A8C0;
@@ -55,204 +54,87 @@
             max-width: 600px;
             margin: 0 auto;
         }
-
-        /* ── SUBJECT NAV ── */
-        .subject-nav {
-            display: flex;
-            justify-content: center;
-            gap: .75rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .subject-nav a {
-            display: inline-block;
-            padding: .55rem 1.1rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,.25);
-            color: #fff;
-            text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 600;
-            letter-spacing: .02em;
-            transition: background .2s ease, border-color .2s ease;
-        }
-
-        .subject-nav a:hover {
-            background: rgba(255,255,255,.1);
-            border-color: rgba(255,255,255,.5);
-        }
-
-        /* ── MAIN CONTENT ── */
+ 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 3rem 1.5rem;
         }
-
-        .intro-box {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.75rem;
-            margin-bottom: 2.5rem;
+ 
+        .prompt {
             text-align: center;
-        }
-
-        .intro-box p {
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: 15px;
             color: var(--muted);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
-
-        /* ── SECTION HEADERS ── */
-        .section-header {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: .04em;
-            color: var(--ink);
-            margin: 3rem 0 1.5rem 0;
-            padding-bottom: 0.75rem;
-            border-bottom: 3px solid var(--accent);
-            scroll-margin-top: 1.5rem;
-        }
-
-        .section-header:first-of-type {
-            margin-top: 2.5rem;
-        }
-
-        /* ── SUB-GROUP HEADERS (within a subject) ── */
-        .subgroup-header {
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            color: var(--accent);
-            margin: 1.75rem 0 .9rem 0;
-        }
-
-        .subgroup-header:first-of-type {
-            margin-top: 0;
-        }
-
-        /* ── INTERACTIVE GRID ── */
-        .interactive-grid {
+ 
+        .subject-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.75rem;
         }
-
-        .interactive-card {
+ 
+        .subject-tile {
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            overflow: hidden;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--ink);
             transition: all .3s ease;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
-
-        .interactive-card:hover {
+ 
+        .subject-tile:hover {
             border-color: var(--accent);
-            box-shadow: 0 8px 24px rgba(45, 91, 227, .12);
+            box-shadow: 0 10px 28px rgba(45, 91, 227, .14);
             transform: translateY(-4px);
         }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--accent) 0%, #1E45C5 100%);
-            color: white;
-            padding: 1.5rem;
+ 
+        .subject-icon { font-size: 3rem; margin-bottom: 1rem; }
+ 
+        .subject-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             letter-spacing: .04em;
+            margin-bottom: .6rem;
         }
-
-        .card-body {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-description {
-            font-size: 14px;
+ 
+        .subject-desc {
+            font-size: 14.5px;
             line-height: 1.6;
             color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+ 
+        .subject-count {
+            font-size: 12.5px;
+            color: #999;
             margin-bottom: 1rem;
         }
-
-        .card-meta {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 1.25rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .card-link {
+ 
+        .subject-enter {
             display: inline-block;
             background: var(--accent);
             color: white;
-            text-decoration: none;
-            padding: .65rem 1.25rem;
+            padding: .65rem 1.5rem;
             border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
-            transition: background .2s ease;
+        }
+ 
+        .subject-tile:hover .subject-enter { background: #1E45C5; }
+ 
+        .empty-note {
             text-align: center;
-            align-self: flex-start;
-            margin-top: auto;
-        }
-
-        .card-link:hover {
-            background: #1E45C5;
-        }
-
-        .card-emoji {
-            font-size: 2.5rem;
-            margin-bottom: .5rem;
-        }
-
-        /* ── FEATURE HIGHLIGHT ── */
-        .features-section {
-            background: var(--green-bg);
-            border: 1px solid var(--highlight-green);
-            border-radius: var(--radius);
-            padding: 1.75rem;
-            margin-bottom: 2rem;
-        }
-
-        .features-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            color: var(--highlight-green);
-            margin-bottom: .75rem;
-            letter-spacing: .04em;
-        }
-
-        .features-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: .75rem;
-        }
-
-        .features-list li {
+            color: var(--muted);
             font-size: 14px;
-            line-height: 1.5;
-            color: var(--ink);
+            padding: 2rem;
         }
-
-        .features-list li::before {
-            content: "✓ ";
-            color: var(--highlight-green);
-            font-weight: 700;
-            margin-right: .5rem;
-        }
-
-        /* ── FOOTER ── */
+ 
         footer {
             text-align: center;
             padding: 2rem 1rem;
@@ -261,151 +143,55 @@
             border-top: 1px solid var(--border);
             margin-top: 2rem;
         }
-
-        @media (max-width: 600px) {
-            .header-title {
-                font-size: 1.75rem;
-            }
-            
-            .interactive-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-header {
-                font-size: 1.5rem;
-            }
-        }
     </style>
 </head>
 <body>
-
+ 
 <div class="header">
     <div class="header-title">GED Interactives</div>
     <div class="header-sub">Master GED/HiSET skills with interactive learning activities — designed for practice and mastery.</div>
-    <nav class="subject-nav">
-        <a href="#language-arts">Language Arts</a>
-        <a href="#science">Science</a>
-    </nav>
 </div>
-
+ 
 <div class="container">
-
-    <div class="intro-box">
-        <p>Choose an interactive below to begin your learning journey. Each activity guides you through key skills with hands-on practice and instant feedback.</p>
-    </div>
-
-    <div class="features-section">
-        <div class="features-title">What You'll Find</div>
-        <ul class="features-list">
-            <li>Step-by-step guided practice</li>
-            <li>Interactive activities & quizzes</li>
-        </ul>
-    </div>
-
-    <!-- MAKING YOUR CASE THROUGH LANGUAGE ARTS SECTION -->
-    <h2 class="section-header" id="language-arts">Making Your Case Through Language Arts</h2>
-
-    <div class="subgroup-header">Argument &amp; Evidence</div>
-    <div class="interactive-grid">
-
-        <!-- Evidence Analyst -->
-        <div class="interactive-card">
-            <div class="card-header">
-                <div class="card-emoji">📖</div>
-                Evidence Analyst
-            </div>
-            <div class="card-body">
-                <div class="card-description">
-                    Master analyzing arguments and evaluating evidence quality.
-                </div>
-                <div class="card-meta">GED RLA · 5 Phases · 20–30 min</div>
-                <a href="EvidenceAnalyst_Activity-2.html" class="card-link">Launch Activity →</a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="subgroup-header">Essay Writing</div>
-    <div class="interactive-grid">
-
-        <!-- Essay Builder -->
-        <div class="interactive-card">
-            <div class="card-header">
-                <div class="card-emoji">✏️</div>
-                Gatesburg Essay Builder
-            </div>
-            <div class="card-body">
-                <div class="card-description">
-                    Write a complete persuasive essay step by step. Read passages, answer guiding questions, and watch your answers turn into an essay paragraph by paragraph.
-                </div>
-                <div class="card-meta">GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min</div>
-                <a href="EssayBuilder_Gatesburg-2-83026.html" class="card-link">Launch Activity →</a>
-            </div>
-        </div>
-
-        <!-- Library Funding Essay Builder -->
-        <div class="interactive-card">
-            <div class="card-header">
-                <div class="card-emoji">📚</div>
-                Library Funding Essay Builder
-            </div>
-            <div class="card-body">
-                <div class="card-description">
-                    Build a full argumentative essay on public library funding. Read paired passages side by side, then answer guiding questions to construct each paragraph.
-                </div>
-                <div class="card-meta">GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min</div>
-                <a href="EssayBuilder_LibraryFunding.html" class="card-link">Launch Activity →</a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="subgroup-header">Grammar &amp; Mechanics</div>
-    <div class="interactive-grid">
-
-        <!-- Grammar Brush-Up -->
-        <div class="interactive-card">
-            <div class="card-header">
-                <div class="card-emoji">✅</div>
-                Tricky Subjects Brush-Up
-            </div>
-            <div class="card-body">
-                <div class="card-description">
-                    Review subject-verb agreement with collective nouns and indefinite pronouns, plus compound vs. complex sentences — with practice questions and instant feedback.
-                </div>
-                <div class="card-meta">HiSET Writing · 2 Concepts · 10 min</div>
-                <a href="GrammarBrushUp_HiSET_Tricky_Subjects.html" class="card-link">Launch Activity →</a>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- EXPLAINING EVERYDAY SCIENCE SECTION -->
-    <h2 class="section-header" id="science">Explaining Everyday Science</h2>
-    <div class="interactive-grid">
-
-        <!-- GED Welcome Module -->
-        <div class="interactive-card">
-            <div class="card-header">
-                <div class="card-emoji">🔬</div>
-                Science Basics
-            </div>
-            <div class="card-body">
-                <div class="card-description">
-                    Build science knowledge with interactive explanations and real-world applications.
-                </div>
-                <div class="card-meta">GED Science · Self-paced · Flexible</div>
-                <a href="hello-ged.html" class="card-link">Launch Activity →</a>
-            </div>
-        </div>
-
-    </div>
-
+    <p class="prompt">Choose a subject to see its activities.</p>
+    <div class="subject-grid" id="subjectGrid"></div>
 </div>
-
+ 
 <footer>
     <p>© 2026 GED Interactives. All rights reserved. Designed for GED learners.</p>
 </footer>
-
+ 
+<script src="activities.js"></script>
+<script>
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
+ 
+function render() {
+  const grid = document.getElementById('subjectGrid');
+  if (!SUBJECTS || SUBJECTS.length === 0) {
+    grid.innerHTML = '<div class="empty-note">No subjects yet — add one to SUBJECTS in activities.js.</div>';
+    return;
+  }
+  grid.innerHTML = SUBJECTS.map(s => {
+    const count = ACTIVITIES.filter(a => a.subject === s.key).length;
+    const countLabel = count === 0 ? 'Coming soon' : `${count} activit${count === 1 ? 'y' : 'ies'}`;
+    return `
+      <a href="subject.html?key=${encodeURIComponent(s.key)}" class="subject-tile">
+        <div class="subject-icon">${s.icon}</div>
+        <div class="subject-name">${escapeHtml(s.name)}</div>
+        <div class="subject-desc">${escapeHtml(s.description)}</div>
+        <div class="subject-count">${countLabel}</div>
+        <span class="subject-enter">Enter →</span>
+      </a>`;
+  }).join('');
+}
+ 
+render();
+</script>
+ 
 </body>
 </html>
+ 
