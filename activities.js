@@ -68,6 +68,15 @@ const ACTIVITIES = [
   },
   {
     subject: 'language-arts',
+    group: 'Essay Writing',
+    icon: '📚',
+    title: 'Rent to Own Essay Builder',
+    description: 'Build a full argumentative essay on public library funding. Read paired passages side by side, then answer guiding questions to construct each paragraph.',
+    meta: 'GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min',
+    url: 'EssayBuilder_LibraryFunding.html'
+  },
+  {
+    subject: 'language-arts',
     group: 'Grammar & Mechanics',
     icon: '✅',
     title: 'Tricky Subjects Brush-Up',
