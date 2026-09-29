@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Highlight the Essay: Somewhere New or Old Favorites?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FCFCFA; --desk:#E6ECF2; --ink:#1E2B3A; --soft:#5B6878;
+  --rule:#CFE0F1; --margin:#EBA7A7; --line:#C9D3DE;
+  --ok:#1E7A46; --retry:#B4531A;
+  --ui:"Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
+  --read:"Literata", Georgia, "Times New Roman", serif;
+  --lh:2.1rem;
+}
+*{box-sizing:border-box}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0}
+.head-ink{--hk:var(--ink);--hs:var(--soft)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--desk:#1B2430;--hk:#EEF2F6;--hs:#B5C0CC}}
+:root[data-theme="dark"]{--desk:#1B2430;--hk:#EEF2F6;--hs:#B5C0CC}
+body{background:var(--desk);color:var(--ink);font-family:var(--ui);font-size:18px;line-height:1.45}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #2F6FDE;outline-offset:2px}
+
+header{padding:1.1rem 1.5rem .4rem;max-width:1320px;margin:0 auto}
+h1{color:var(--hk,var(--ink));font-family:var(--ui);font-size:1.7rem;margin:0 0 .15rem;letter-spacing:-.01em}
+.sub{margin:0;color:var(--hs,var(--soft))}
+
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.center{min-width:0}
+.tab{border:2px solid var(--line);background:#fff;border-radius:.6rem .6rem 0 0;padding:.55rem 1rem;cursor:pointer;font-weight:700;border-bottom:none}
+.tab[aria-selected="true"]{background:var(--paper);border-color:var(--ink)}
+
+.wrap{max-width:1320px;margin:.8rem auto 0;padding:0 1.5rem 2rem;display:grid;grid-template-columns:230px minmax(0,1fr) 270px;gap:1.2rem;align-items:start}
+
+/* Highlighter tray */
+.tray{position:sticky;top:calc(.8rem + env(safe-area-inset-top,0px));margin-top:2.9rem;background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.8rem}
+.tray h2,.side h2{font-size:1rem;margin:0 0 .5rem}
+.group{margin:.7rem 0 .25rem;font-size:.85rem;color:var(--soft);font-weight:700}
+.pen{display:flex;align-items:center;gap:.55rem;width:100%;text-align:left;background:none;border:2px solid transparent;border-radius:.5rem;padding:.35rem .45rem;cursor:pointer;font-size:.95rem}
+.pen:hover{background:#F2F5F8}
+.pen[aria-pressed="true"]{border-color:var(--ink);background:#F2F5F8;font-weight:700}
+.nib{flex:none;width:2.1rem;height:1.05rem;border-radius:.2rem .55rem .55rem .2rem;background:var(--c);border:1.5px solid rgba(30,43,58,.35);position:relative}
+.nib::after{content:"";position:absolute;right:-.45rem;top:.2rem;width:.45rem;height:.55rem;background:var(--c);clip-path:polygon(0 0,100% 35%,100% 65%,0 100%);filter:brightness(.85)}
+.eraser .nib{background:repeating-linear-gradient(45deg,#fff 0 4px,#E3E7EC 4px 8px)}
+.eraser .nib::after{display:none}
+.opt{display:flex;gap:.5rem;align-items:center;margin-top:.8rem;font-size:.9rem;color:var(--soft);cursor:pointer}
+
+/* Notebook page */
+.page{background:var(--paper);border:2px solid var(--ink);border-radius:0 .8rem .8rem .8rem;min-height:60vh;position:relative;padding:1.2rem 1.6rem 1.6rem 4.2rem;
+  background-image:linear-gradient(90deg,transparent 3rem,var(--margin) 3rem,var(--margin) calc(3rem + 2px),transparent calc(3rem + 2px))}
+.direction{font-family:var(--ui);background:#fff;border:1.5px solid var(--line);border-radius:.5rem;padding:.6rem .8rem;margin:0 0 1rem;line-height:1.4}
+.essay{font-family:var(--read);font-size:1.18rem;line-height:var(--lh);max-width:68ch;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--lh) - 1px),var(--rule) calc(var(--lh) - 1px),var(--rule) var(--lh))}
+.essay h3{font-family:var(--read);font-size:1.3rem;margin:0 0 .4rem;font-weight:600;line-height:var(--lh)}
+.essay p{margin:0 0 var(--lh);text-indent:0}
+.s{cursor:pointer;border-radius:.35em .2em .4em .25em;padding:.08em .1em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .12s}
+.s:hover{background:rgba(30,43,58,.07)}
+.s.hl{background:linear-gradient(to bottom,transparent 6%,var(--hl) 6%,var(--hl) 94%,transparent 94%)}
+.tag{display:inline-block;font-family:var(--ui);font-size:.62em;font-weight:700;line-height:1.3;padding:0 .45em;margin-right:.3em;border:1.5px solid var(--ink);border-radius:999px;background:#fff;vertical-align:.18em;white-space:nowrap}
+.hide-tags .tag{display:none}
+.mark{font-family:var(--ui);font-weight:700;font-size:.8em;margin-left:.2em;white-space:nowrap}
+.mark.ok{color:var(--ok)} .mark.retry{color:var(--retry)}
+.s.unmarked{outline:2px dashed var(--retry);outline-offset:1px}
+.ghost{display:none;font-style:italic;color:var(--soft);border:2px dashed var(--soft);border-radius:.3em;padding:0 .2em}
+.show-removed .ghost{display:inline}
+.ghost b{font-style:normal;font-family:var(--ui);font-size:.7em}
+
+.bar{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.4rem;font-family:var(--ui)}
+.btn{border:2px solid var(--ink);background:#fff;border-radius:.5rem;padding:.5rem .95rem;cursor:pointer;font-weight:700}
+.btn.primary{background:var(--ink);color:#fff}
+.btn:hover{filter:brightness(.95)}
+.result{margin-top:.8rem;font-family:var(--ui);font-weight:700}
+
+textarea{width:100%;font-family:var(--read);font-size:1.05rem;line-height:1.6;border:2px solid var(--line);border-radius:.5rem;padding:.7rem;background:#fff;resize:vertical}
+
+/* Checklist */
+.side{position:sticky;top:calc(.8rem + env(safe-area-inset-top,0px));margin-top:2.9rem;display:flex;flex-direction:column;gap:1rem}
+.card{background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.8rem}
+.check{list-style:none;margin:0;padding:0}
+.check li{display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:1px solid #EEF1F4;font-size:.93rem}
+.check li:last-child{border-bottom:none}
+.dot{flex:none;width:1rem;height:1rem;border-radius:.2rem;background:var(--c);border:1.5px solid rgba(30,43,58,.35)}
+.check .name{flex:1}
+.count{font-weight:700;white-space:nowrap}
+.count.done{color:var(--ok)} .count.miss{color:var(--retry)}
+.fix h2{margin-bottom:.3rem}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.4rem 0 .6rem}
+.chip{border:1.5px solid var(--ink);background:var(--c);border-radius:999px;padding:.15rem .6rem;cursor:pointer;font-size:.85rem;font-weight:700}
+.chip[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:1px}
+.starter{background:#F5F7FA;border-left:4px solid var(--c,#999);padding:.45rem .6rem;margin:.4rem 0;font-family:var(--read);font-size:.98rem}
+.hint{font-size:.88rem;color:var(--soft);margin:.2rem 0}
+.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.6rem 1rem;border-radius:.5rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+
+@media (max-width:1050px){
+  .wrap{grid-template-columns:minmax(0,1fr)}
+  .tray,.side{position:static}
+  .pens{display:flex;flex-wrap:wrap;gap:.2rem}
+  .pen{width:auto}
+  .group{width:100%}
+  .tray,.side{margin-top:0}
+  .center{order:-1}
+  .tray{order:-2}
+  .page{padding-left:3.4rem;background-image:linear-gradient(90deg,transparent 2.4rem,var(--margin) 2.4rem,var(--margin) calc(2.4rem + 2px),transparent calc(2.4rem + 2px))}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  header,.wrap{padding-left:.7rem;padding-right:.7rem}
+  .page{padding:1rem .9rem 1.2rem 1rem;background-image:none}
+  .essay{font-size:1.05rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Highlight the Essay</h1>
+  <p class="sub">Pick a highlighter, then click a sentence to show what job it does. Click it again to take the color off.</p>
+</header>
+
+<div class="wrap">
+  <aside class="tray" aria-label="Highlighters">
+    <h2>Highlighters</h2>
+    <div class="pens" id="pens"></div>
+    <label class="opt"><input type="checkbox" id="tagsToggle" checked> Show labels on sentences</label>
+  </aside>
+
+  <div class="center">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <main class="page" id="page" role="tabpanel"></main>
+  </div>
+
+  <aside class="side">
+    <div class="card">
+      <h2>What's on the page</h2>
+      <ul class="check" id="check"></ul>
+    </div>
+    <div class="card fix" id="fix" hidden></div>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const FUNCS = [
+  {key:'choice',  group:'Opening',         name:'Choice sentence',       short:'Choice',        c:'#FFE45E', need:1,
+   hint:'Names your choice and both reasons.', starter:'I would rather ___ because ___ and ___.'},
+  {key:'reason',  group:'Body paragraphs', name:'Reason',                short:'Reason',        c:'#FFBE6B', need:2,
+   hint:'Opens a body paragraph by naming one of your reasons.', starter:'First, ___.   /   Second, ___.'},
+  {key:'example', group:'Body paragraphs', name:'Example',               short:'Example',       c:'#A6E88F', need:2,
+   hint:'A specific detail or story the reader can picture.', starter:'For example, ___.'},
+  {key:'why',     group:'Body paragraphs', name:'Why it proves it',      short:'Why',           c:'#8DD3FF', need:2,
+   hint:'Explains why the example shows your choice is the better one.', starter:'This shows ___ is the better choice because ___.'},
+  {key:'objection',group:'Counterargument',name:'a. Objection',          short:'a. Objection',  c:'#FFD3E4', need:1,
+   hint:'What someone who disagrees with you might say.', starter:'Some people might say ___ because ___.'},
+  {key:'sense',   group:'Counterargument', name:'b. What makes sense',   short:'b. Makes sense',c:'#FFA9CB', need:1,
+   hint:'Admits the part of their point that is fair.', starter:'That point makes sense, since ___.'},
+  {key:'convince',group:'Counterargument', name:'c. Convince them',      short:'c. Convince',   c:'#FF80B1', need:1,
+   hint:'Answers the objection so the other person might agree with you.', starter:'However, ___.'},
+  {key:'restate', group:'Conclusion',      name:'Choice in new words',   short:'Restate',       c:'#DCCBFF', need:1,
+   hint:'Says your choice and both reasons again, using different words.', starter:'In the end, ___ is the smarter choice because ___ and ___.'},
+  {key:'action',  group:'Conclusion',      name:'Call to action',        short:'Action',        c:'#B99AFF', need:1,
+   hint:'Tells the reader what to do next.', starter:'Next time you ___, ___.'}
+];
+const F = Object.fromEntries(FUNCS.map(f=>[f.key,f]));
+
+/* [sentence, accepted keys ("a|b"), removedInBrokenVersion?] */
+const A = { title:'Exemplar 1: Somewhere New', paras:[
+ [['I would rather vacation somewhere new because it gives me experiences I could never get at home and it pushes me to grow as a person.','choice']],
+ [['First, a new place offers experiences I can\u2019t find anywhere else.','reason'],
+  ['Last summer my cousin took a trip to New Orleans for the first time.','example'],
+  ['She came back talking about beignets, street musicians on every corner, and houses that looked nothing like the ones in our town.','example'],
+  ['She still brings up that trip, and it gave her stories and memories that feel like they belong only to her.','example|why'],
+  ['This shows why somewhere new is the better choice: a vacation should feel different from everyday life, and a new place guarantees that it will.','why',1]],
+ [['Second, going somewhere unfamiliar helps me grow.','reason'],
+  ['When I don\u2019t know the area, I have to read maps, ask strangers for directions, and try food I\u2019ve never tasted.','example'],
+  ['Each of those small challenges builds confidence.','why|example',1],
+  ['A place I already know doesn\u2019t ask anything of me, so I come home the same person I was when I left.','why',1],
+  ['A new destination sends me home a little braver.','why',1]],
+ [['Some people might argue that new places are risky because you could waste money on a hotel or restaurant that turns out to be terrible.','objection'],
+  ['That point makes sense, since vacation time and money are limited and nobody wants a disappointing trip.','sense',1],
+  ['However, a little research with online reviews can prevent most bad surprises, and even a trip with a few hiccups gives you a funny story to tell later.','convince'],
+  ['The small risk is worth the reward.','convince']],
+ [['In the end, exploring a new destination beats returning to an old favorite because it creates one-of-a-kind memories and makes me more confident.','restate'],
+  ['For your next vacation, pick a spot on the map you\u2019ve never seen, and go find out what you\u2019ve been missing.','action']]
+]};
+const B = { title:'Exemplar 2: Revisit Favorite Places', paras:[
+ [['I would rather revisit my favorite places because I know I will enjoy the trip and it lets me truly relax.','choice']],
+ [['First, returning to a favorite place means I already know I will have a good time.','reason'],
+  ['Every summer my family goes back to the same beach in South Carolina.','example'],
+  ['We know which restaurant has the best shrimp, which part of the beach is least crowded, and where to watch the sunset.','example'],
+  ['Because we don\u2019t waste time guessing, every day of the trip is filled with things we love.','why|example'],
+  ['This shows why revisiting is the better choice: vacation time is short, and a familiar place makes sure none of it is wasted.','why']],
+ [['Second, a familiar place lets me rest instead of stress.','reason'],
+  ['On a trip to somewhere new, I have to figure out directions, parking, and where to eat, which can feel like work.','example'],
+  ['At a place I already know, I can put my phone away and simply enjoy myself.','example'],
+  ['The whole point of a vacation is to recharge, and it is much easier to recharge when I\u2019m not solving problems all day.','why']],
+ [['Someone might object that going to the same place again and again is boring and that I am missing out on the rest of the world.','objection'],
+  ['I can understand that, because trying new things can be exciting and it\u2019s natural to wonder what else is out there.','sense'],
+  ['However, a favorite place is never exactly the same twice.','convince'],
+  ['There is always a new shop, a new trail, or a new memory to make with the people I love, so it offers fresh moments without the stress.','convince']],
+ [['Overall, going back to a place I love is the smarter choice because it promises a great time and gives me real rest.','restate'],
+  ['Before you book a trip to somewhere unknown, think about the place that always makes you happy, and give yourself permission to go back.','action']]
+]};
+
+const TABS = [
+  {id:'a', label:'Somewhere new', essay:A, broken:false,
+   dir:'Mark every sentence with the highlighter that matches its job. When you think you\u2019re done, press <b>Check my work</b>.'},
+  {id:'b', label:'Revisit favorites', essay:B, broken:false,
+   dir:'Mark every sentence with the highlighter that matches its job. When you think you\u2019re done, press <b>Check my work</b>.'},
+  {id:'c', label:'What\u2019s missing?', essay:A, broken:true,
+   dir:'Some sentences were taken out of this essay. Mark every sentence that\u2019s still here, then look at <b>What\u2019s on the page</b>. Which jobs have no sentence doing them?'},
+  {id:'mine', label:'My essay', mine:true,
+   dir:'Paste your mini essay below. Then mark your own sentences. The checklist shows what\u2019s there and what\u2019s missing.'}
+];
+
+const state = {
+  tab:'a', pen:'choice', tags:true, showRemoved:false,
+  marks:{a:{},b:{},c:{},mine:{}}, checked:{a:false,b:false,c:false}, key:{a:false,b:false,c:false},
+  mineText:'', mineParas:null, fix:null
+};
+
+const $ = s => document.querySelector(s);
+const esc = t => t.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2200);}
+
+/* ---------- Tabs ---------- */
+function drawTabs(){
+  $('#tabs').innerHTML = TABS.map(t=>`<button class="tab" role="tab" aria-selected="${t.id===state.tab}" data-tab="${t.id}">${t.label}</button>`).join('');
+}
+$('#tabs').addEventListener('click', e=>{
+  const b=e.target.closest('[data-tab]'); if(!b) return;
+  state.tab=b.dataset.tab; state.fix=null; drawTabs(); render();
+});
+
+/* ---------- Pens ---------- */
+function drawPens(){
+  let html='', g='';
+  FUNCS.forEach((f,i)=>{
+    if(f.group!==g){ g=f.group; html+=`<div class="group">${g}</div>`; }
+    html+=`<button class="pen" style="--c:${f.c}" data-pen="${f.key}" aria-pressed="${state.pen===f.key}"><span class="nib" aria-hidden="true"></span>${f.name}</button>`;
+  });
+  html+=`<div class="group">Mistake?</div><button class="pen eraser" data-pen="erase" aria-pressed="${state.pen==='erase'}"><span class="nib" aria-hidden="true"></span>Eraser</button>`;
+  $('#pens').innerHTML=html;
+}
+$('#pens').addEventListener('click', e=>{
+  const b=e.target.closest('[data-pen]'); if(!b) return;
+  state.pen=b.dataset.pen; drawPens();
+});
+$('#tagsToggle').addEventListener('change', e=>{ state.tags=e.target.checked; render(); });
+
+/* ---------- Sentence splitting for student essays ---------- */
+function splitEssay(text){
+  return text.replace(/\r/g,'').split(/\n+/).map(p=>p.trim()).filter(Boolean)
+    .map(p => (p.match(/[^.!?]+[.!?]+["'\u2019\u201D)\]]*|[^.!?]+$/g)||[p]).map(s=>[s.trim(),'']).filter(s=>s[0]));
+}
+
+/* ---------- Helpers ---------- */
+function currentTab(){ return TABS.find(t=>t.id===state.tab); }
+function sentencesFor(tab){
+  const paras = tab.mine ? (state.mineParas||[]) : tab.essay.paras;
+  const out=[];
+  paras.forEach((p,pi)=>p.forEach((s,si)=>out.push({id:`${tab.id}-${pi}-${si}`, pi, text:s[0], keys:(s[1]||'').split('|').filter(Boolean), removed: tab.broken && !!s[2]})));
+  return out;
+}
+function shownKey(tab, s){
+  if(!tab.mine && state.key[tab.id]) return s.keys[0];
+  return state.marks[tab.id][s.id];
+}
+
+/* ---------- Render ---------- */
+function render(){
+  const tab=currentTab();
+  const page=$('#page');
+  page.classList.toggle('show-removed', tab.broken && state.showRemoved);
+
+  if(tab.mine && !state.mineParas){
+    page.innerHTML = `<p class="direction">${tab.dir}</p>
+      <label for="mineText" class="hint" style="display:block;margin-bottom:.3rem">Your mini essay (keep each paragraph on its own line)</label>
+      <textarea id="mineText" rows="14" placeholder="I would rather ...">${esc(state.mineText)}</textarea>
+      <div class="bar"><button class="btn primary" id="loadMine">Put my essay on the page</button></div>`;
+    $('#loadMine').onclick=()=>{
+      const t=$('#mineText').value.trim();
+      if(!t){ toast('Paste your essay in the box first.'); return; }
+      state.mineText=t; state.mineParas=splitEssay(t); state.marks.mine={}; render();
+    };
+    drawChecklist(tab); drawFix(tab); return;
+  }
+
+  const sents=sentencesFor(tab);
+  const checked = !tab.mine && state.checked[tab.id] && !state.key[tab.id];
+  let html=`<p class="direction">${tab.dir}</p><div class="essay${state.tags?'':' hide-tags'}">`;
+  if(!tab.mine) html+=`<h3>${tab.essay.title}${tab.broken?' (with sentences removed)':''}</h3>`;
+  let cur=-1;
+  sents.forEach(s=>{
+    if(s.pi!==cur){ if(cur>-1) html+='</p>'; html+='<p>'; cur=s.pi; }
+    if(s.removed){ html+=`<span class="ghost"><b>Removed: ${F[s.keys[0]].short}</b> ${esc(s.text)}</span> `; return; }
+    const k=shownKey(tab,s);
+    let cls='s', style='', tag='', mark='';
+    if(k){ cls+=' hl'; style=`--hl:${F[k].c}`; tag=`<span class="tag">${F[k].short}</span>`; }
+    if(checked){
+      if(!k) cls+=' unmarked';
+      else if(s.keys.includes(k)) mark='<span class="mark ok" aria-label="matches the key">\u2713</span>';
+      else mark='<span class="mark retry" aria-label="look again">\u21BA</span>';
+    }
+    html+=`<span class="${cls}" style="${style}" data-id="${s.id}" role="button" tabindex="0">${tag}${esc(s.text)}${mark}</span> `;
+  });
+  if(cur>-1) html+='</p>';
+  html+='</div><div class="bar">';
+  if(tab.mine){
+    html+=`<button class="btn" id="editMine">Change my essay text</button><button class="btn" id="clear">Clear highlights</button>`;
+  } else {
+    html+=`<button class="btn primary" id="checkBtn">Check my work</button>
+           <button class="btn" id="keyBtn">${state.key[tab.id]?'Show my highlights':'Show answer key'}</button>
+           <button class="btn" id="clear">Clear highlights</button>`;
+    if(tab.broken) html+=`<button class="btn" id="removedBtn">${state.showRemoved?'Hide what was removed':'Show what was removed'}</button>`;
+  }
+  html+='</div>';
+  if(checked){
+    const live=sents.filter(s=>!s.removed);
+    const right=live.filter(s=>{const k=state.marks[tab.id][s.id]; return k && s.keys.includes(k);}).length;
+    const blank=live.filter(s=>!state.marks[tab.id][s.id]).length;
+    html+=`<p class="result">${right} of ${live.length} sentences match the key.${blank?` ${blank} still need a highlight (dashed outline).`:''} Sentences with \u21BA are worth another look.</p>`;
+  }
+  page.innerHTML=html;
+
+  const on=(id,fn)=>{const el=document.getElementById(id); if(el) el.onclick=fn;};
+  on('checkBtn',()=>{ state.checked[tab.id]=true; state.key[tab.id]=false; render(); });
+  on('keyBtn',()=>{ state.key[tab.id]=!state.key[tab.id]; render(); });
+  on('clear',()=>{ state.marks[tab.id]={}; if(!tab.mine){state.checked[tab.id]=false; state.key[tab.id]=false;} render(); });
+  on('removedBtn',()=>{ state.showRemoved=!state.showRemoved; render(); });
+  on('editMine',()=>{ state.mineParas=null; render(); });
+
+  drawChecklist(tab); drawFix(tab);
+}
+
+$('#page').addEventListener('click', e=>{
+  const s=e.target.closest('.s'); if(s) mark(s.dataset.id);
+});
+$('#page').addEventListener('keydown', e=>{
+  const s=e.target.closest('.s');
+  if(s && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); mark(s.dataset.id, true); }
+});
+function mark(id, refocus){
+  const tab=currentTab();
+  if(!tab.mine && state.key[tab.id]){ toast('Switch back to your highlights to keep marking.'); return; }
+  const m=state.marks[tab.id];
+  if(state.pen==='erase' || m[id]===state.pen) delete m[id]; else m[id]=state.pen;
+  render();
+  if(refocus){ const el=document.querySelector(`[data-id="${id}"]`); if(el) el.focus(); }
+}
+
+/* ---------- Checklist ---------- */
+function counts(tab){
+  const c=Object.fromEntries(FUNCS.map(f=>[f.key,0]));
+  sentencesFor(tab).forEach(s=>{ if(s.removed) return; const k=shownKey(tab,s); if(k) c[k]++; });
+  return c;
+}
+function drawChecklist(tab){
+  const c=counts(tab);
+  $('#check').innerHTML = FUNCS.map(f=>{
+    const n=c[f.key], done=n>=f.need;
+    const label = done ? `\u2713 ${n}` : `${n} of ${f.need}`;
+    return `<li><span class="dot" style="--c:${f.c}"></span><span class="name">${f.name}</span><span class="count ${done?'done':(n===0?'miss':'')}">${label}</span></li>`;
+  }).join('');
+}
+
+/* ---------- Fix one (My essay) ---------- */
+function drawFix(tab){
+  const box=$('#fix');
+  if(!tab.mine || !state.mineParas){ box.hidden=true; return; }
+  box.hidden=false;
+  const c=counts(tab);
+  const missing=FUNCS.filter(f=>c[f.key]<f.need);
+  const pool = missing.length ? missing : FUNCS;
+  if(!state.fix || !pool.find(f=>f.key===state.fix)) state.fix = pool[0].key;
+  const f=F[state.fix];
+  const prev = box.querySelector('#fixText') ? box.querySelector('#fixText').value : '';
+  box.innerHTML = `<h2>Fix one</h2>
+    <p class="hint">${missing.length ? 'Pick one missing piece and write it now.' : 'Every piece is on the page. Pick the one you think is weakest and make it stronger.'}</p>
+    <div class="chips">${pool.map(p=>`<button class="chip" style="--c:${p.c}" data-fix="${p.key}" aria-pressed="${p.key===state.fix}">${p.short}</button>`).join('')}</div>
+    <p class="hint"><b>${f.name}:</b> ${f.hint}</p>
+    <div class="starter" style="--c:${f.c}">${esc(f.starter)}</div>
+    <label for="fixText" class="hint">Write your sentence:</label>
+    <textarea id="fixText" rows="4"></textarea>
+    <div class="bar"><button class="btn primary" id="copyFix">Copy my sentence</button></div>`;
+  box.querySelector('#fixText').value=prev;
+  box.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>{ state.fix=b.dataset.fix; drawFix(tab); });
+  box.querySelector('#copyFix').onclick=async()=>{
+    const v=box.querySelector('#fixText').value.trim();
+    if(!v){ toast('Write your sentence first.'); return; }
+    try{ await navigator.clipboard.writeText(v); }
+    catch(e){ const t=box.querySelector('#fixText'); t.select(); document.execCommand('copy'); }
+    toast('Copied. Paste it in the Zoom chat.');
+  };
+}
+
+drawTabs(); drawPens(); render();
+</script>
+</body>
+</html>
