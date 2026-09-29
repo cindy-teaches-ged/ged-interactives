@@ -66,18 +66,6 @@ const ACTIVITIES = [
     meta: 'GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min',
     url: 'EssayBuilder_LibraryFunding.html'
   },
-cat << 'EOF'
-  {
-    subject: 'language-arts',
-    group: 'Essay Writing',
-    icon: '🛋️',
-    title: 'Rent to Own Essay Builder',
-    description: 'Build a full argumentative essay on rent-to-own buying. Read both passages inside the tool, then answer guiding questions to construct each paragraph.',
-    meta: 'GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min',
-    url: 'EssayBuilder_RentToOwn.html'
-  },
-EOF
-Output
   {
     subject: 'language-arts',
     group: 'Essay Writing',
