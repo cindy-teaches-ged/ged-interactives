@@ -87,6 +87,15 @@ Output
     meta: 'GED RLA/HiSET Writing · 5 Paragraphs · 45–60 min',
     url: 'EssayBuilder_RentToOwn.html'
   },
+{
+    subject: 'language-arts',
+    group: 'Essay Writing',
+    icon: '🖍️',
+    title: 'Highlight the Essay',
+    description: 'Color-code two model mini essays to see the job every sentence does, find what is missing, then highlight your own essay and fix one piece.',
+    meta: 'GED RLA/HiSET Writing · Mini Essay · 20–30 min',
+    url: 'EssayHighlighter_Vacation.html'
+  },
   {
     subject: 'language-arts',
     group: 'Grammar & Mechanics',
